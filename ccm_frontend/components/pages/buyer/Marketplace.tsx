@@ -203,7 +203,7 @@ export function Marketplace() {
                     <SelectContent>
                       <SelectItem value="all">Tất cả</SelectItem>
                       <SelectItem value="Hà Nội">Hà Nội</SelectItem>
-                      <SelectItem value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</SelectItem>
+                      <SelectItem value="TP.HCM">TP.HCM</SelectItem>
                       <SelectItem value="Đà Nẵng">Đà Nẵng</SelectItem>
                       <SelectItem value="Hải Phòng">Hải Phòng</SelectItem>
                       <SelectItem value="Cần Thơ">Cần Thơ</SelectItem>
