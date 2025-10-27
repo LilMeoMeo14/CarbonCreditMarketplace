@@ -1,0 +1,60 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# =========================
+# Node / React / Vite Frontend
+# =========================
+ccm_frontend/node_modules/
+ccm_frontend/dist/
+ccm_frontend/build/
+ccm_frontend/.vite/
+ccm_frontend/.cache/
+ccm_frontend/coverage/
+ccm_frontend/.env
+ccm_frontend/.env.local
+ccm_frontend/.env.development
+ccm_frontend/.env.production
+ccm_frontend/npm-debug.log*
+ccm_frontend/yarn-debug.log*
+ccm_frontend/yarn-error.log*
+
+# =========================
+# ⚡ OS / Misc
+# =========================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.old
