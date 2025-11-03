@@ -9,6 +9,15 @@ Admin"
 
 
 
+"1. EV Owner (Chủ sở hữu xe điện)
++ Đăng ký & quản lý hồ sơ xe điện (EV profile).
++ Theo dõi lượng CO₂ tránh phát thải (Carbon Savings Tracking).
++ Gửi yêu cầu phát hành tín chỉ carbon.
++ Quản lý ví tín chỉ carbon (Carbon Wallet).
++ Niêm yết tín chỉ để bán hoặc tham gia đấu giá.
++ Quản lý giao dịch & lịch sử bán tín chỉ.
++ Thanh toán & rút tiền về ví điện tử/ngân hàng.
++ Nhận chứng nhận giảm phát thải (Certificate)."
 
 "2. Chức năng cho Người mua tín chỉ carbon (Carbon Credit Buyer)
 + Tìm kiếm & lọc tín chỉ theo số lượng, giá, khu vực.
