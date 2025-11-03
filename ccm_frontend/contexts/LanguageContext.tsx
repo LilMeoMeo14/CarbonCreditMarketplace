@@ -33,8 +33,9 @@ const translations: Record<Language, Record<string, string>> = {
     'common.loading': 'Đang tải...',
     'common.error': 'Lỗi',
     'common.success': 'Thành công',
-    
+
     // Navigation
+    'nav.home': 'Home',
     'nav.dashboard': 'Tổng quan',
     'nav.marketplace': 'Thị trường',
     'nav.howItWorks': 'Cách hoạt động',
@@ -43,7 +44,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.faq': 'Câu hỏi thường gặp',
     'nav.contact': 'Liên hệ',
     'nav.about': 'Về chúng tôi',
-    
+
     // Footer
     'footer.tagline': 'Kết nối chủ xe điện với người mua tín chỉ carbon',
     'footer.platform': 'Nền tảng',
@@ -52,7 +53,7 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.terms': 'Điều khoản dịch vụ',
     'footer.privacy': 'Chính sách bảo mật',
     'footer.copyright': '© 2025 EV Carbon Market. Bảo lưu mọi quyền.',
-    
+
     // EV Owner
     'evOwner.dashboard': 'Tổng quan',
     'evOwner.profile': 'Hồ sơ xe & Quản lý',
@@ -63,19 +64,19 @@ const translations: Record<Language, Record<string, string>> = {
     'evOwner.wallet': 'Ví tín chỉ',
     'evOwner.issuanceHistory': 'Lịch sử phát hành',
     'evOwner.listings': 'Quản lý niêm yết',
-    
+
     // Buyer
     'buyer.dashboard': 'Tổng quan',
     'buyer.marketplace': 'Thị trường',
     'buyer.cart': 'Giỏ hàng',
     'buyer.auctions': 'Đấu giá',
     'buyer.history': 'Lịch sử mua',
-    
+
     // CVA
     'cva.dashboard': 'Tổng quan',
     'cva.queue': 'Hồ sơ chờ duyệt',
     'cva.verified': 'Đã xác minh',
-    
+
     // Admin
     'admin.dashboard': 'Tổng quan',
     'admin.users': 'Quản lý người dùng',
@@ -83,13 +84,13 @@ const translations: Record<Language, Record<string, string>> = {
     'admin.transactions': 'Giao dịch',
     'admin.reports': 'Báo cáo & Thống kê',
     'admin.settings': 'Cài đặt hệ thống',
-    
+
     // Roles
     'role.buyer': 'Người Mua',
     'role.evOwner': 'Người Bán',
     'role.cva': 'CVA Kiểm Duyệt',
     'role.admin': 'Quản trị viên',
-    
+
     // Submit Emission
     'submit.title': 'Gửi hồ sơ phát thải',
     'submit.vehicleInfo': 'Thông Tin Xe Điện',
@@ -126,7 +127,7 @@ const translations: Record<Language, Record<string, string>> = {
     'common.loading': 'Loading...',
     'common.error': 'Error',
     'common.success': 'Success',
-    
+
     // Navigation
     'nav.dashboard': 'Dashboard',
     'nav.marketplace': 'Marketplace',
@@ -136,7 +137,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.faq': 'FAQ',
     'nav.contact': 'Contact',
     'nav.about': 'About Us',
-    
+
     // EV Owner
     'evOwner.dashboard': 'Dashboard',
     'evOwner.profile': 'EV Profile & Management',
@@ -147,19 +148,19 @@ const translations: Record<Language, Record<string, string>> = {
     'evOwner.wallet': 'Credit Wallet',
     'evOwner.issuanceHistory': 'Issuance History',
     'evOwner.listings': 'Listings Management',
-    
+
     // Buyer
     'buyer.dashboard': 'Dashboard',
     'buyer.marketplace': 'Marketplace',
     'buyer.cart': 'Shopping Cart',
     'buyer.auctions': 'Auctions',
     'buyer.history': 'Purchase History',
-    
+
     // CVA
     'cva.dashboard': 'Dashboard',
     'cva.queue': 'Verification Queue',
     'cva.verified': 'Verified Credits',
-    
+
     // Admin
     'admin.dashboard': 'Dashboard',
     'admin.users': 'User Management',
@@ -167,13 +168,13 @@ const translations: Record<Language, Record<string, string>> = {
     'admin.transactions': 'Transactions',
     'admin.reports': 'Reports & Analytics',
     'admin.settings': 'System Settings',
-    
+
     // Roles
     'role.buyer': 'Buyer',
     'role.evOwner': 'EV Owner',
     'role.cva': 'CVA Verifier',
     'role.admin': 'Administrator',
-    
+
     // Submit Emission
     'submit.title': 'Submit Emission Data',
     'submit.vehicleInfo': 'Electric Vehicle Information',
@@ -218,3 +219,5 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     </LanguageContext.Provider>
   );
 }
+
+
