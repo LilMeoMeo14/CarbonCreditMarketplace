@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nhom12.uth.ccm.model.enums.UserRole;
+import nhom12.uth.ccm.model.enums.UserStatus;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,7 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id",updatable = false,nullable = false,columnDefinition = "VARCHAR(36)")
@@ -75,67 +77,67 @@ public class User {
     )
     private List<CarbonCreditRequest> creditRequests = new ArrayList<>();
 
-    // one to one
-    // one user -> one Carbon wallet
-    @OneToOne(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            orphanRemoval = true
-    )
-    private CarbonWallet carbonWallet;
-    // one to one
-    // one user -> one EWallet
-    @OneToOne(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            orphanRemoval = true
-    )
-    private EWallet eWallet;
-    /**
-     * Quan hệ Một-Nhiều (One-to-Many) với Listing.
-     * Một User có thể đăng nhiều Listing (bài đăng bán).
-     * 'mappedBy = "user"': Giả định class Listing có trường 'private User user;' (hoặc seller).
-     * CascadeType.ALL: Xóa User, xóa luôn các listing của họ.
-     */
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private List<Listing> listings = new ArrayList<>();
-    /**
-     * Lịch sử các giao dịch MUA của User.
-     * 'mappedBy = "buyer"': Giả định class Transaction có trường 'private User buyer;'.
-     * KHÔNG DÙNG CASCADE: Khi xóa User, ta không muốn xóa lịch sử giao dịch.
-     */
-    @OneToMany(
-            mappedBy = "buyer",
-            fetch = FetchType.LAZY
-    )
-    private List<Transaction> purchasedTransactions = new ArrayList<>();
-    @OneToMany(
-            mappedBy = "seller",
-            fetch = FetchType.LAZY
-    )
-    private List<Transaction> saleTransactions = new ArrayList<>();
-    @OneToMany(
-            mappedBy = "bidder",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private List<Bid> bids = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "owner",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private List<Certificate> certificates = new ArrayList<>();
+//    // one to one
+//    // one user -> one Carbon wallet
+//    @OneToOne(
+//            mappedBy = "user",
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY,
+//            orphanRemoval = true
+//    )
+//    private CarbonWallet carbonWallet;
+//    // one to one
+//    // one user -> one EWallet
+//    @OneToOne(
+//            mappedBy = "user",
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY,
+//            orphanRemoval = true
+//    )
+//    private EWallet eWallet;
+//    /**
+//     * Quan hệ Một-Nhiều (One-to-Many) với Listing.
+//     * Một User có thể đăng nhiều Listing (bài đăng bán).
+//     * 'mappedBy = "user"': Giả định class Listing có trường 'private User user;' (hoặc seller).
+//     * CascadeType.ALL: Xóa User, xóa luôn các listing của họ.
+//     */
+//    @OneToMany(
+//            mappedBy = "user",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY
+//    )
+//    private List<Listing> listings = new ArrayList<>();
+//    /**
+//     * Lịch sử các giao dịch MUA của User.
+//     * 'mappedBy = "buyer"': Giả định class Transaction có trường 'private User buyer;'.
+//     * KHÔNG DÙNG CASCADE: Khi xóa User, ta không muốn xóa lịch sử giao dịch.
+//     */
+//    @OneToMany(
+//            mappedBy = "buyer",
+//            fetch = FetchType.LAZY
+//    )
+//    private List<Transaction> purchasedTransactions = new ArrayList<>();
+//    @OneToMany(
+//            mappedBy = "seller",
+//            fetch = FetchType.LAZY
+//    )
+//    private List<Transaction> saleTransactions = new ArrayList<>();
+//    @OneToMany(
+//            mappedBy = "bidder",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY
+//    )
+//    private List<Bid> bids = new ArrayList<>();
+//
+//    @OneToMany(
+//            mappedBy = "owner",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY
+//    )
+//    private List<Certificate> certificates = new ArrayList<>();
 
     // full parameter
     public User(String email, String password_hash, String full_name, String phoneNumber, UserRole userRole, UserStatus status) {
