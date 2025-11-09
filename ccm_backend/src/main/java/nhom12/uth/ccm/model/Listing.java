@@ -2,6 +2,9 @@ package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import nhom12.uth.ccm.model.enums.ListingStatus;
+import nhom12.uth.ccm.model.enums.ListingType;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -43,16 +46,3 @@ public class Listing {
     private LocalDateTime expiresAt;
 }
 
-// Enum for Listing Type
-enum ListingType {
-    DIRECT_SALE,
-    AUCTION
-}
-
-// Enum for Listing Status
-enum ListingStatus {
-    ACTIVE,
-    SOLD,
-    CANCELLED,
-    EXPIRED
-}

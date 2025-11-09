@@ -1,6 +1,6 @@
 package nhom12.uth.ccm.model.enums;
 
-enum RequestStatus {
+public enum RequestStatus {
     PENDING,
     APPROVED,
     REJECTED

@@ -3,7 +3,6 @@ package nhom12.uth.ccm.model;
 import jakarta.persistence.*;
 import lombok.*;
 import nhom12.uth.ccm.model.enums.RequestStatus;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp; 
 
@@ -17,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CarbonCreditRequest {
 
     @Id 

@@ -2,6 +2,10 @@ package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import nhom12.uth.ccm.model.enums.PaymentMethod;
+import nhom12.uth.ccm.model.enums.PaymentStatus;
+import nhom12.uth.ccm.model.enums.TransactionType;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -38,7 +42,7 @@ public class Transaction {
     
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false)
     private TransactionType transactionType;
@@ -46,7 +50,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false)
     private PaymentMethod paymentMethod;
@@ -58,23 +62,3 @@ public class Transaction {
     private LocalDateTime createdAt = LocalDateTime.now();
 }
 
-// Enum for Transaction Type
-enum TransactionType {
-    DIRECT_PURCHASE,
-    AUCTION_WIN
-}
-
-// Enum for Payment Status
-enum PaymentStatus {
-    PENDING,
-    COMPLETED,
-    FAILED,
-    REFUNDED
-}
-
-// Enum for Payment Method
-enum PaymentMethod {
-    E_WALLET,
-    BANK_TRANSFER,
-    CRYPTO
-}
