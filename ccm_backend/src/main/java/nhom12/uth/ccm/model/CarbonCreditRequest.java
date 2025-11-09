@@ -1,10 +1,8 @@
 package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import nhom12.uth.ccm.model.enums.RequestStatus;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp; 
@@ -12,12 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-enum RequestStatus {
-    PENDING,
-    APPROVED,
-    REJECTED
-}
 
 @Entity
 @Table(name = "carbon_credit_request")
@@ -49,7 +41,7 @@ public class CarbonCreditRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    @ColumnDefault("'PENDING'") // Ánh xạ giá trị DEFAULT từ ERD
+    @Builder.Default// Ánh xạ giá trị DEFAULT từ ERD
     private RequestStatus status = RequestStatus.PENDING; // ENUM, DEFAULT 'PENDING'
 
     @ManyToOne(fetch = FetchType.LAZY)
