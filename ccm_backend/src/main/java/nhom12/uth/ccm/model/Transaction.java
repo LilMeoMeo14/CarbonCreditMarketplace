@@ -1,13 +1,18 @@
-package com.yourcompany.model;
+package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transaction")
-@Setters
-@Getters
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {

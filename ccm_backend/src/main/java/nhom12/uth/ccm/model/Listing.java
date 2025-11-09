@@ -1,11 +1,21 @@
-package com.yourpackage.model; // đổi theo package project của bạn
+package nhom12.uth.ccm.model; 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "listing")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Listing {
 
     @Id
@@ -38,83 +48,4 @@ public class Listing {
     @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
-    // --- Constructors ---
-    public Listing() {
-    }
-
-    public Listing(User seller, BigDecimal quantityKg, BigDecimal pricePerKg,
-                   ListingType listingType, ListingStatus status, LocalDateTime expiresAt) {
-        this.seller = seller;
-        this.quantityKg = quantityKg;
-        this.pricePerKg = pricePerKg;
-        this.listingType = listingType;
-        this.status = status != null ? status : ListingStatus.ACTIVE;
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = expiresAt;
-    }
-
-    // --- Getters & Setters ---
-    public Integer getListingId() {
-        return listingId;
-    }
-
-    public void setListingId(Integer listingId) {
-        this.listingId = listingId;
-    }
-
-    public User getSeller() {
-        return seller;
-    }
-
-    public void setSeller(User seller) {
-        this.seller = seller;
-    }
-
-    public BigDecimal getQuantityKg() {
-        return quantityKg;
-    }
-
-    public void setQuantityKg(BigDecimal quantityKg) {
-        this.quantityKg = quantityKg;
-    }
-
-    public BigDecimal getPricePerKg() {
-        return pricePerKg;
-    }
-
-    public void setPricePerKg(BigDecimal pricePerKg) {
-        this.pricePerKg = pricePerKg;
-    }
-
-    public ListingType getListingType() {
-        return listingType;
-    }
-
-    public void setListingType(ListingType listingType) {
-        this.listingType = listingType;
-    }
-
-    public ListingStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ListingStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
-    }
 }
