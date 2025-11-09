@@ -1,5 +1,4 @@
 package nhom12.uth.ccm.model;
-<<<<<<< Updated upstream
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -69,17 +68,4 @@ public class CarbonCredit {
         this.user = newOwner;
         this.status = "TRANSFERRED";
     }
-=======
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "carbon_credit")
-public class CarbonCredit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "credit_id")
-    private long credit_id;
-
-    
->>>>>>> Stashed changes
 }
