@@ -48,6 +48,7 @@ public class EWallet {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+
     // === Các phương thức logic tiện ích ===
 
     /** Nạp tiền vào ví */
