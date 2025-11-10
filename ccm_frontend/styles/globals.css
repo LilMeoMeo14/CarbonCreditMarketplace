@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-size: 16px;
+  
+  /* Green theme - Format HSL cho Tailwind (h s% l%) */
+  --background: 151 88% 95%;
+  --foreground: 174 74% 19%;
+  --card: 0 0% 100%;
+  --card-foreground: 174 74% 19%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 174 74% 19%;
+  --primary: 160 84% 39%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 149 80% 90%;
+  --secondary-foreground: 164 91% 30%;
+  --muted: 151 77% 95%;
+  --muted-foreground: 0 0% 42%;
+  --accent: 159 75% 68%;
+  --accent-foreground: 164 91% 30%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 149 66% 85%;
+  --input: 0 0% 0% / 0;
+  --input-background: 0 0% 100%;
+  --switch-background: 214 14% 83%;
+  --ring: 160 84% 39%;
+  --chart-1: 160 84% 39%;
+  --chart-2: 141 71% 48%;
+  --chart-3: 156 72% 67%;
+  --chart-4: 159 75% 68%;
+  --chart-5: 149 66% 85%;
+  --radius: 0.875rem;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 174 74% 19%;
+  --sidebar-primary: 160 84% 39%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 151 77% 95%;
+  --sidebar-accent-foreground: 164 91% 30%;
+  --sidebar-border: 149 80% 90%;
+  --sidebar-ring: 160 84% 39%;
+}
+
+.dark {
+  --background: 0 0% 14.5%;
+  --foreground: 0 0% 98.5%;
+  --card: 0 0% 14.5%;
+  --card-foreground: 0 0% 98.5%;
+  --popover: 0 0% 14.5%;
+  --popover-foreground: 0 0% 98.5%;
+  --primary: 0 0% 98.5%;
+  --primary-foreground: 0 0% 20.5%;
+  --secondary: 0 0% 26.9%;
+  --secondary-foreground: 0 0% 98.5%;
+  --muted: 0 0% 26.9%;
+  --muted-foreground: 0 0% 70.8%;
+  --accent: 0 0% 26.9%;
+  --accent-foreground: 0 0% 98.5%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98.5%;
+  --border: 0 0% 26.9%;
+  --input: 0 0% 26.9%;
+  --ring: 0 0% 43.9%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+  --sidebar: 0 0% 20.5%;
+  --sidebar-foreground: 0 0% 98.5%;
+  --sidebar-primary: 220 70% 50%;
+  --sidebar-primary-foreground: 0 0% 98.5%;
+  --sidebar-accent: 0 0% 26.9%;
+  --sidebar-accent-foreground: 0 0% 98.5%;
+  --sidebar-border: 0 0% 26.9%;
+  --sidebar-ring: 0 0% 43.9%;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/**
+ * Base typography
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      @apply text-2xl font-medium leading-relaxed;
+    }
+
+    h2 {
+      @apply text-xl font-medium leading-relaxed;
+    }
+
+    h3 {
+      @apply text-lg font-medium leading-relaxed;
+    }
+
+    h4 {
+      @apply text-base font-medium leading-relaxed;
+    }
+
+    p {
+      @apply text-base font-normal leading-relaxed;
+    }
+
+    label {
+      @apply text-base font-medium leading-relaxed;
+    }
+
+    button {
+      @apply text-base font-medium leading-relaxed;
+    }
+
+    input {
+      @apply text-base font-normal leading-relaxed;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Custom animations for auction urgency */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow-red {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-glow-red {
+  animation: glow-red 2s ease-in-out infinite;
+}
