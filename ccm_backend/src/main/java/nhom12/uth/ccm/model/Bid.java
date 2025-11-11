@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import nhom12.uth.ccm.model.Auction;
 import nhom12.uth.ccm.model.enums.BidStatus;
 
 import org.hibernate.annotations.ColumnDefault;

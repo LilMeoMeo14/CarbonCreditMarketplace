@@ -80,7 +80,7 @@ public class User extends BaseEntity {
      * 'mappedBy = "user"':
      * CascadeType.ALL: Xóa User, xóa luôn các listing của họ.
      */
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Listing> listings = new ArrayList<>();
     /**
      * Lịch sử các giao dịch MUA của User.
@@ -91,10 +91,10 @@ public class User extends BaseEntity {
     private List<Transaction> purchasedTransactions = new ArrayList<>();
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<Transaction> saleTransactions = new ArrayList<>();
-    @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Certificate> certificates = new ArrayList<>();
 
     // full parameter
