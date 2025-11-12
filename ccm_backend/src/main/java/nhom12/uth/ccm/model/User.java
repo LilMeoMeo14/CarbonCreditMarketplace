@@ -1,19 +1,32 @@
 package nhom12.uth.ccm.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nhom12.uth.ccm.model.enums.UserRole;
 import nhom12.uth.ccm.model.enums.UserStatus;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -106,5 +119,14 @@ public class User extends BaseEntity {
         this.phoneNumber = phoneNumber;
         this.userRole = userRole;
         this.status = status;
+    }
+    @PrePersist
+    protected void onCreate() {
+    if (createdAt == null) {
+        createdAt = LocalDateTime.now();
+    }
+    if (status == null) {
+        status = UserStatus.ACTIVE;
+    }
     }
 }

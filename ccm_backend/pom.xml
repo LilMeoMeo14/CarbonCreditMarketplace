@@ -65,29 +65,35 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--H2 Database-->
+		<dependency>
+   		 <groupId>com.h2database</groupId>
+    	<artifactId>h2</artifactId>
+   		 <scope>test</scope>
+		</dependency>
 		<!--Sql server-->
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
-			<version>13.2.1.jre11</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<!--Lombok - codegen-->
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+   		 <groupId>org.projectlombok</groupId>
+   		 <artifactId>lombok</artifactId>
+   		 <scope>provided</scope>
 		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
 		<!--Spring-boot-jpa-data-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>3.5.3</version>
 		</dependency>
 
 		<!--Spring sercurity-->
@@ -99,6 +105,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
+		
 		<!--JWT-->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
