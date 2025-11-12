@@ -65,6 +65,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--H2 Database-->
+		<dependency>
+   		 <groupId>com.h2database</groupId>
+    	<artifactId>h2</artifactId>
+   		 <scope>test</scope>
+		</dependency>
 		<!--Sql server-->
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
@@ -76,9 +83,11 @@
 		<!--Lombok - codegen-->
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+   		 <groupId>org.projectlombok</groupId>
+   		 <artifactId>lombok</artifactId>
+   		 <scope>provided</scope>
 		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
 		<!--Spring-boot-jpa-data-->
