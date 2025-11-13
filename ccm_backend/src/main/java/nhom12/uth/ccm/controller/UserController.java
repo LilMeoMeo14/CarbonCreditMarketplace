@@ -34,4 +34,10 @@ public class UserController {
         return userService.updateUser(updateUserRequestDTO,userId);
     }
 
+    @DeleteMapping("/{userId}")
+    String deleteUser(@PathVariable("userId") String userId) {
+        userService.DeleteUserById(userId);
+        return "User was successfully delete";
+    }
+
 }
