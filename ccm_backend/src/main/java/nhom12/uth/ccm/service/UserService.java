@@ -2,7 +2,6 @@ package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
 import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
-import nhom12.uth.ccm.dto.respone.UserResponeDTO;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.model.enums.UserRole;
 import nhom12.uth.ccm.model.enums.UserStatus;
@@ -12,22 +11,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
 
     // tao user moi
     @Override
     public User createUser(CreateUserRequestDTO requestDTO) {
-        // kiem tra email co nguoi su dung chua
-
-        // kiem tra sdt co nguoi su dung chua
-
         // hashpassword
 
         // khoi tao user moi
         User user = new User();
+
+        // kiem tra email co nguoi su dung chua
+        if (userRepository.existsByEmail(requestDTO.getEmail()))
+            throw new RuntimeException("Email exsisted");
+        // kiem tra sdt co nguoi su dung chua
+        if (userRepository.existsByPhoneNumber(requestDTO.getPhoneNumber()))
+            throw new RuntimeException("Phone number exitsted");
 
         user.setFirstName(requestDTO.getFirstName());
         user.setLastName(requestDTO.getLastName());
@@ -49,7 +53,7 @@ public class UserService implements IUserService{
 
     @Override
     public User getUserById(String userId) {
-        return  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
