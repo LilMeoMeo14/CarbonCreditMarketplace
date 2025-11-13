@@ -1,5 +1,6 @@
 package nhom12.uth.ccm.controller;
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
+import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public class UserController {
     @GetMapping("/{userId}")
     User getUserById(@PathVariable("userId") String userId) {
         return userService.getUserById(userId);
+    }
+
+    @PutMapping("/{userId}")
+    User updateUser(@RequestBody UpdateUserRequestDTO updateUserRequestDTO, @PathVariable("userId") String userId) {
+        return userService.updateUser(updateUserRequestDTO,userId);
     }
 
 }

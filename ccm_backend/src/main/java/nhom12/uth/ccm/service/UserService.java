@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
+import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
 import nhom12.uth.ccm.dto.respone.UserResponeDTO;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.model.enums.UserRole;
@@ -52,8 +53,15 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public UserResponeDTO updateUser(String userId) {
-        return null;
+    public User updateUser(UpdateUserRequestDTO updateUserRequestDTO, String userId) {
+        User user = getUserById(userId);
+        user.setFirstName(updateUserRequestDTO.getFirstName());
+        user.setLastName(updateUserRequestDTO.getLastName());
+        user.setEmail(updateUserRequestDTO.getEmail());
+        user.setPhoneNumber(updateUserRequestDTO.getPhoneNumber());
+        user.setPasswordHash(updateUserRequestDTO.getPassword());
+
+        return userRepository.save(user);
     }
 
     @Override

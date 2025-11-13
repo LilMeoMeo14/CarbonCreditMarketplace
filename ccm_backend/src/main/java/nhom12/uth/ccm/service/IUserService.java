@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
+import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
 import nhom12.uth.ccm.dto.respone.UserResponeDTO;
 import nhom12.uth.ccm.model.User;
 
@@ -27,7 +28,7 @@ public interface IUserService {
     /*
     * Cập nhật thông tin người dùng
     * */
-    UserResponeDTO updateUser(String userId);
+    User updateUser(UpdateUserRequestDTO updateUserRequestDTO, String userId);
 
     /*
     * Xoa nguoi dung theo id
