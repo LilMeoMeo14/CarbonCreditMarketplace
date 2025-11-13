@@ -42,13 +42,13 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public List<UserResponeDTO> getUsers() {
-        return List.of();
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public UserResponeDTO getUserById(String userId) {
-        return null;
+    public User getUserById(String userId) {
+        return  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override

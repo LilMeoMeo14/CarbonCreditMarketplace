@@ -11,12 +11,12 @@ public interface IUserService {
     * Lấy tất cả người dùng
     *
     * */
-    List<UserResponeDTO> getUsers();
+    List<User> getUsers();
 
     /*
     * Lấy người dùng theo ID
     * */
-    UserResponeDTO getUserById(String userId);
+    User getUserById(String userId);
 
 
     /*
