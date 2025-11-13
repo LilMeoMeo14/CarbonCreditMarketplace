@@ -4,23 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,20 +22,23 @@ import nhom12.uth.ccm.model.enums.UserStatus;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
-    private String user_id;
+    private String userId;
 
     @Column(name = "email", length = 255, unique = true, nullable = false)
     private String email;
 
     @Column(name = "password_hash", length = 255, nullable = false)
-    private String password_hash;
+    private String passwordHash;
 
-    @Column(name = "full_name", length = 100)
-    private String full_name;
+    @Column(name ="first_name" , length = 30)
+    private String firstName;
+
+    @Column(name ="last_name" , length = 30)
+    private String lastName;
 
     @Column(name = "phone_number", length = 20, unique = true)
     private String phoneNumber;
@@ -111,22 +102,33 @@ public class User extends BaseEntity {
     private List<Certificate> certificates = new ArrayList<>();
 
     // full parameter
-    public User(String email, String password_hash, String full_name, String phoneNumber, UserRole userRole,
-            UserStatus status) {
+    public User(String userId, String email, String passwordHash, String firstName, String lastName, String phoneNumber, UserRole userRole, UserStatus status) {
+        this.userId = userId;
         this.email = email;
-        this.password_hash = password_hash;
-        this.full_name = full_name;
+        this.passwordHash = passwordHash;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.userRole = userRole;
         this.status = status;
     }
+
+    // set datatime
     @PrePersist
     protected void onCreate() {
-    if (createdAt == null) {
-        createdAt = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
+
     }
-    if (status == null) {
-        status = UserStatus.ACTIVE;
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
-    }
+
+
 }
