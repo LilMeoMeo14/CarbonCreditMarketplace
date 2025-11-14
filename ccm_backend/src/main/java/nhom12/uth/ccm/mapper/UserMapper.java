@@ -25,5 +25,6 @@ public interface UserMapper {
 
     @Mapping(source = "userRole",target = "role")
     @Mapping(source = "userId",target = "userId")
+    @Mapping(source = "passwordHash",target = "password")
     UserResponeDTO toUserResponeDTO(User user);
 }

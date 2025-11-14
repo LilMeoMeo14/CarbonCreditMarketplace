@@ -15,10 +15,12 @@ import nhom12.uth.ccm.model.enums.UserStatus;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponeDTO {
     String userId;
+    String password;
     String email;
     String phoneNumber;
     String firstName;
     String lastName;
     UserRole role;
     UserStatus status;
+
 }

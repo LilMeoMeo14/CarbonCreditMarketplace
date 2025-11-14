@@ -8,7 +8,9 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
+import nhom12.uth.ccm.config.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,8 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     // tao user moi
     @Override
     public UserResponeDTO createUser(CreateUserRequestDTO requestDTO) {
@@ -33,6 +37,9 @@ public class UserService implements IUserService {
             throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
         // mapping user
         User user  = userMapper.toUser(requestDTO);
+        // hashing password
+        String hashedPassword = passwordEncoder.encode(requestDTO.getPassword());
+        user.setPasswordHash(hashedPassword);
         // luu vao database
         return userMapper.toUserResponeDTO(userRepository.save(user));
     }
