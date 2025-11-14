@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.exception;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 
+@Slf4j
 @ControllerAdvice
 // anotation de thong bao cho spring biet day la noi chua tat ca cac exception
 public class GlobalExceptionHandler {
@@ -19,10 +21,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ApiRespone> handlerRuntimeException(AppException ex) {
         ErrorCode errorCode = ex.getErrorCode();
-        ApiRespone apiRespone = new ApiRespone();
-        apiRespone.setCode(errorCode.getCode());
-        apiRespone.setMessage(errorCode.getMessage());
-
+        ApiRespone apiRespone = ApiRespone.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiRespone);
     }
 
@@ -30,10 +32,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiRespone> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         String enumKey = ex.getFieldError().getDefaultMessage();
-        ErrorCode errorCode = ErrorCode.valueOf(enumKey);
-        ApiRespone apiRespone = new ApiRespone();
-        apiRespone.setCode(errorCode.getCode());
-        apiRespone.setMessage(errorCode.getMessage());
+
+        ErrorCode errorCode = ErrorCode.INVALID_MESSAGE_KEY;
+        try {
+            errorCode = ErrorCode.valueOf(enumKey);
+        }catch (Exception e) {
+            log.error(enumKey + ":" + e.getMessage());
+        }
+        ApiRespone apiRespone = ApiRespone.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiRespone);
     }
 
@@ -44,9 +53,10 @@ public class GlobalExceptionHandler {
         // Print log ra console
         ex.printStackTrace();
 
-        ApiRespone apiRespone = new ApiRespone();
-        apiRespone.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiRespone.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+        ApiRespone apiRespone = ApiRespone.builder()
+                .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
+                .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                .build();
 
         // Error 500
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiRespone);

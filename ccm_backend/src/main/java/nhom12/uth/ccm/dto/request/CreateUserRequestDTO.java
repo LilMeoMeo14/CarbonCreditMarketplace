@@ -18,6 +18,7 @@ public class CreateUserRequestDTO {
     private String email;
     @Size(min = 8, max = 30, message = "PASSWORD_INVALID")
     private String password;
+    @Size(min = 10, max = 10, message = "PHONENUMBER_INVALID")
     private String phoneNumber;
     private String firstName;
     private String lastName;

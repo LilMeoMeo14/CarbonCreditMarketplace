@@ -8,7 +8,6 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
-import nhom12.uth.ccm.config.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -93,7 +92,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void DeleteUserById(String userId) {
+    public void deleteUserById(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }

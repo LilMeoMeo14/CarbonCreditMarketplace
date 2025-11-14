@@ -33,7 +33,6 @@ public interface IUserService {
     /*
      * Xoa nguoi dung theo id
      */
-
-    void DeleteUserById(String userId);
+    void deleteUserById(String userId);
 
 }

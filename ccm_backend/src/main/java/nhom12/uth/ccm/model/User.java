@@ -40,7 +40,7 @@ public class User {
     @Column(name ="last_name" , length = 30)
     private String lastName;
 
-    @Column(name = "phone_number", length = 20, unique = true)
+    @Column(name = "phone_number", length = 11, unique = true)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)

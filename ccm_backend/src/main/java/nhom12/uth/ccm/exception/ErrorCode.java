@@ -15,11 +15,14 @@ public enum ErrorCode {
 
     // validation cho du lieu dau vai
     EMAIL_INVALID(2001,"Invalid email"),
-    PHONENUMBER_INVALID(2002,"Phone numer invalid"),
+    PHONENUMBER_INVALID(2002,"Phone numer muse be 10 digits"),
     PASSWORD_INVALID(2003,"Passowrd must be 8 - 30 characters long"),
+    PASSWORD_INCORRECT(2004,"Password incorrect"),
 
     // validation not found
     USER_NOT_FOUND(3001,"User not found"),
+    EMAIL_NOT_FOUND(3002,"Email not found"),
+    PHONENUMBER_NOT_FOUND(3003,"Phone number not found"),
 
 
     // loi khong xac dinh
