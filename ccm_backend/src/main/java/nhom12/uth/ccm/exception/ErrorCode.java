@@ -18,8 +18,15 @@ public enum ErrorCode {
     PHONENUMBER_INVALID(2002,"Phone numer invalid"),
     PASSWORD_INVALID(2003,"Passowrd must be 8 - 30 characters long"),
 
+    // validation not found
+    USER_NOT_FOUND(3001,"User not found"),
+
+
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");
+
+
+
 
     ;
     private final int code;

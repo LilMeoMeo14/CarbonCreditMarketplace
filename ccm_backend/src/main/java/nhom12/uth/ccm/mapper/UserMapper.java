@@ -16,9 +16,14 @@ public interface UserMapper {
     @Mapping(source = "password",target = "passwordHash")
     User toUser(CreateUserRequestDTO createUserRequestDTO);
 
+
+    @Mapping(target = "email" , ignore = true) // xu ly thu cong
+    @Mapping(target = "phoneNumber" , ignore = true)
     @Mapping(source = "role" ,target = "userRole")
     @Mapping(source = "password",target = "passwordHash")
     void updateUser(@MappingTarget User user, UpdateUserRequestDTO updateUserRequestDTO );
 
+    @Mapping(source = "userRole",target = "role")
+    @Mapping(source = "userId",target = "userId")
     UserResponeDTO toUserResponeDTO(User user);
 }

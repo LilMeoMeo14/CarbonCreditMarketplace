@@ -14,11 +14,11 @@ import nhom12.uth.ccm.model.enums.UserStatus;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponeDTO {
+    String userId;
     String email;
-    String password;
     String phoneNumber;
     String firstName;
     String lastName;
     UserRole role;
-    UserStatus status =  UserStatus.ACTIVE;
+    UserStatus status;
 }

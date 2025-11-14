@@ -13,7 +13,7 @@ public interface IUserService {
      * Lấy tất cả người dùng
      *
      */
-    List<User> getUsers();
+    List<UserResponeDTO> getUsers();
 
     /*
      * Lấy người dùng theo ID
@@ -23,7 +23,7 @@ public interface IUserService {
     /*
      * Tạo người dùng mới
      */
-    User createUser(CreateUserRequestDTO requestDTO);
+    UserResponeDTO createUser(CreateUserRequestDTO requestDTO);
 
     /*
      * Cập nhật thông tin người dùng

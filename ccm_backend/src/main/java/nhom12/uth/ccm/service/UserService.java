@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
@@ -21,7 +22,7 @@ public class UserService implements IUserService {
     private UserMapper userMapper;
     // tao user moi
     @Override
-    public User createUser(CreateUserRequestDTO requestDTO) {
+    public UserResponeDTO createUser(CreateUserRequestDTO requestDTO) {
         // hashpassword
 
         // kiem tra email co nguoi su dung chua
@@ -33,29 +34,60 @@ public class UserService implements IUserService {
         // mapping user
         User user  = userMapper.toUser(requestDTO);
         // luu vao database
-        return userRepository.save(user);
+        return userMapper.toUserResponeDTO(userRepository.save(user));
     }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserResponeDTO> getUsers() {
+
+        return userRepository
+                .findAll()
+                .stream()
+                .map(userMapper::toUserResponeDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public UserResponeDTO getUserById(String userId) {
-        return userMapper.toUserResponeDTO(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
+        return userMapper.toUserResponeDTO(userRepository.findById(userId).orElseThrow(() ->  new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     @Override
     public UserResponeDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO, String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // mapper nay cau hinh de bo qua truong email va phone
         userMapper.updateUser(user, updateUserRequestDTO);
+
+        // cap nhat email
+        if(updateUserRequestDTO.getEmail() != null
+                && !updateUserRequestDTO.getEmail().isEmpty()
+                && !updateUserRequestDTO.getEmail().equals(user.getEmail()))
+        {
+            if(userRepository.existsByEmail(updateUserRequestDTO.getEmail())) // existsByEmail kiem tra xem trong database co ton tai user voi email do khong
+            {
+                throw new AppException(ErrorCode.EMAIL_EXISTED);
+            }
+            user.setEmail(updateUserRequestDTO.getEmail());
+        }
+
+        // cap nhat phone number
+        if(updateUserRequestDTO.getPhoneNumber() != null
+                &&  !updateUserRequestDTO.getPhoneNumber().isEmpty()
+                && !updateUserRequestDTO.getPhoneNumber().equals(user.getPhoneNumber()))
+        {
+            if(userRepository.existsByPhoneNumber(updateUserRequestDTO.getPhoneNumber())){
+                throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
+            }
+            user.setPhoneNumber(updateUserRequestDTO.getPhoneNumber());
+        }
+
         return userMapper.toUserResponeDTO(userRepository.save(user));
     }
 
     @Override
     public void DeleteUserById(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 }
