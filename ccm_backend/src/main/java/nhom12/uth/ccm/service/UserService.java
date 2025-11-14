@@ -2,9 +2,11 @@ package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
 import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
+import nhom12.uth.ccm.dto.respone.UserResponeDTO;
+import nhom12.uth.ccm.exception.AppException;
+import nhom12.uth.ccm.exception.ErrorCode;
+import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
-import nhom12.uth.ccm.model.enums.UserRole;
-import nhom12.uth.ccm.model.enums.UserStatus;
 import nhom12.uth.ccm.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,31 +17,21 @@ import java.util.List;
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
-
+    @Autowired
+    private UserMapper userMapper;
     // tao user moi
     @Override
     public User createUser(CreateUserRequestDTO requestDTO) {
         // hashpassword
 
-        // khoi tao user moi
-        User user = new User();
-
         // kiem tra email co nguoi su dung chua
         if (userRepository.existsByEmail(requestDTO.getEmail()))
-            throw new RuntimeException("Email exsisted");
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         // kiem tra sdt co nguoi su dung chua
         if (userRepository.existsByPhoneNumber(requestDTO.getPhoneNumber()))
-            throw new RuntimeException("Phone number exitsted");
-
-        user.setFirstName(requestDTO.getFirstName());
-        user.setLastName(requestDTO.getLastName());
-        user.setEmail(requestDTO.getEmail());
-        user.setPhoneNumber(requestDTO.getPhoneNumber());
-        // set password da ma hoa
-        user.setPasswordHash(requestDTO.getPassword());
-        user.setUserRole(UserRole.EV_OWNER); // mac dinh la EV_OWNER
-        user.setStatus(UserStatus.ACTIVE); // mac dinh la active
-
+            throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
+        // mapping user
+        User user  = userMapper.toUser(requestDTO);
         // luu vao database
         return userRepository.save(user);
     }
@@ -50,25 +42,20 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserById(String userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserResponeDTO getUserById(String userId) {
+        return userMapper.toUserResponeDTO(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
     }
 
     @Override
-    public User updateUser(UpdateUserRequestDTO updateUserRequestDTO, String userId) {
-        User user = getUserById(userId);
-        user.setFirstName(updateUserRequestDTO.getFirstName());
-        user.setLastName(updateUserRequestDTO.getLastName());
-        user.setEmail(updateUserRequestDTO.getEmail());
-        user.setPhoneNumber(updateUserRequestDTO.getPhoneNumber());
-        user.setPasswordHash(updateUserRequestDTO.getPassword());
-
-        return userRepository.save(user);
+    public UserResponeDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO, String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        userMapper.updateUser(user, updateUserRequestDTO);
+        return userMapper.toUserResponeDTO(userRepository.save(user));
     }
 
     @Override
     public void DeleteUserById(String userId) {
-        User user = getUserById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
     }
 }
