@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "payment_transaction")
 @NoArgsConstructor
 
-public class PaymentTransaction extends BaseEntity {
+public class PaymentTransaction {
 
     /**
      * Khóa chính (Primary Key)
