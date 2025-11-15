@@ -2,6 +2,7 @@ package nhom12.uth.ccm.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -15,6 +16,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nhom12.uth.ccm.model.enums.UserRole;
 import nhom12.uth.ccm.model.enums.UserStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -22,7 +26,7 @@ import nhom12.uth.ccm.model.enums.UserStatus;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
@@ -40,7 +44,7 @@ public class User {
     @Column(name ="last_name" , length = 30)
     private String lastName;
 
-    @Column(name = "phone_number", length = 20, unique = true)
+    @Column(name = "phone_number", length = 11, unique = true)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
@@ -131,4 +135,38 @@ public class User {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + userRole.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

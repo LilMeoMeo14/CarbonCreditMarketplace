@@ -1,79 +1,60 @@
 package nhom12.uth.ccm.exception;
 
-import nhom12.uth.ccm.dto.respone.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.RestControllerAdvice; // Đổi từ @ControllerAdvice sang @RestControllerAdvice cho chuẩn REST
 
-import java.util.ArrayList;
-import java.util.List;
-
-@RestControllerAdvice // Dùng annotation này để tự động trả về JSON
+@Slf4j
+@RestControllerAdvice // anotation de thong bao cho spring biet day la noi chua tat ca cac exception
 public class GlobalExceptionHandler {
 
-    // 1. Xử lý lỗi ngoại lệ chung (RuntimeException)
-    // Ví dụ: Ném ra throw new RuntimeException("User not found");
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException ex) {
-        ApiResponse<Void> response = ApiResponse.<Void>builder()
-                .success(false)
-                .message(ex.getMessage()) // Lấy message từ exception
+    // Xử lý lỗi RuntimeException
+    // Trả về 400 Bad Request
+
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ApiRespone> handlerRuntimeException(AppException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ApiRespone apiRespone = ApiRespone.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
                 .build();
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.badRequest().body(apiRespone);
     }
 
-    // 2. Xử lý lỗi Validate dữ liệu (@Valid) - Quan trọng cho API đăng ký/đăng nhập
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
-        List<ApiResponse.ValidationError> errors = new ArrayList<>();
+    // Validation (MethodArgumentNotValidException)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiRespone> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        String enumKey = ex.getFieldError().getDefaultMessage();
 
-        // Lặp qua tất cả các lỗi của các trường (field)
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.add(new ApiResponse.ValidationError(error.getField(), error.getDefaultMessage()));
+        ErrorCode errorCode = ErrorCode.INVALID_MESSAGE_KEY;
+        try {
+            errorCode = ErrorCode.valueOf(enumKey);
+        }catch (Exception e) {
+            log.error(enumKey + ":" + e.getMessage());
         }
-
-        ApiResponse<Void> response = ApiResponse.<Void>builder()
-                .success(false)
-                .message("Invalid request parameters")
-                .errors(errors) // Gán danh sách lỗi chi tiết vào
+        ApiRespone apiRespone = ApiRespone.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
                 .build();
-
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.badRequest().body(apiRespone);
     }
 
-    // 3. Xử lý lỗi hệ thống không mong muốn (Exception.class) - Trả về 500
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnwantedException(Exception ex) {
-        ApiResponse<Void> response = ApiResponse.<Void>builder()
-                .success(false)
-                .message("An unexpected error occurred: " + ex.getMessage())
+    // Validation 500, ....
+    @ExceptionHandler(value = RuntimeException.class) // Bắt tất cả RuntimeException
+    public ResponseEntity<ApiRespone> handlerGeneralRuntimeException(RuntimeException ex) { // Tham số là RuntimeException
+
+        // Print log ra console
+        ex.printStackTrace();
+
+        ApiRespone apiRespone = ApiRespone.builder()
+                .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
+                .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
-
-    // 4. Xử lý lỗi Không tìm thấy (Trả về 404 Not Found)
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUserNotFoundException(UserNotFoundException ex) {
-        ApiResponse<Void> response = ApiResponse.<Void>builder()
-                .success(false)
-                .message(ex.getMessage())
-                .build();
-        
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-
-    // 5. Xử lý lỗi Không đủ tín chỉ (Trả về 409 Conflict)
-    @ExceptionHandler(InsufficientCreditsException.class)
-    public ResponseEntity<ApiResponse<Void>> handleInsufficientCreditsException(InsufficientCreditsException ex) {
-        ApiResponse<Void> response = ApiResponse.<Void>builder()
-                .success(false)
-                .message(ex.getMessage())
-                .build();
-        
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        // Error 500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiRespone);
     }
 }
