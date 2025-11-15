@@ -4,15 +4,18 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import nhom12.uth.ccm.dto.request.AuthenticationRequest;
-
+import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
 import nhom12.uth.ccm.dto.respone.AuthenticationResponse;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IAuthenticationService;
+import nhom12.uth.ccm.service.IJwtService;
+import nhom12.uth.ccm.service.IUserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,18 +23,48 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService implements IAuthenticationService {
 
-        @Autowired
         IUserRepository userRepository;
-        @Autowired
-        PasswordEncoder passwordEncoder;
+        IUserService userService;
+        AuthenticationManager authenticationManager;
+        IJwtService jwtService;
 
         @Override
-        public Boolean authenticate(AuthenticationRequest authenticationRequest) {
+        public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
+                authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(
+                                                authenticationRequest.getEmail(),
+                                                authenticationRequest.getPassword()));
+
+                // neu khong loi tim user
                 var user = userRepository.findByEmail(authenticationRequest
                                 .getEmail())
-                                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
-                passwordEncoder.encode(authenticationRequest.getPassword());
-                return passwordEncoder.matches(authenticationRequest.getPassword(), user.getPasswordHash());
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+                // tao jwt token
+                String token = jwtService.generateToken(user.getEmail());
+
+                // tra ve token
+
+                return AuthenticationResponse.builder()
+                                .token(token)
+                                .success(true)
+                                .build();
+
         }
 
+        @Override
+        public AuthenticationResponse register(CreateUserRequestDTO createUserRequestDTO) {
+                // goi service luu user
+                userService.createUser(createUserRequestDTO);
+
+                // gen jwt token
+                String token = jwtService.generateToken(createUserRequestDTO.getEmail());
+
+                // tra ve token
+
+                return AuthenticationResponse.builder()
+                                .token(token)
+                                .success(true)
+                                .build();
+        }
 }

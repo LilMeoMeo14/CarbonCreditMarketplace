@@ -1,6 +1,5 @@
 package nhom12.uth.ccm.controller;
 
-import lombok.Builder;
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
 import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
 import nhom12.uth.ccm.dto.respone.UserResponeDTO;
@@ -21,17 +20,18 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     ApiRespone<UserResponeDTO> createUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) { /*
-                                                                                                  * anotation valid
-                                                                                                  * thong bao cho spring
-                                                                                                  * biet la can phai
-                                                                                                  * validate
-                                                                                                  * CreateUserRequestDTO
-                                                                                                  */
+                                                                                                            * anotation
+                                                                                                            * valid
+                                                                                                            * thong bao
+                                                                                                            * cho spring
+                                                                                                            * biet la
+                                                                                                            * can phai
+                                                                                                            * validate
+                                                                                                            * CreateUserRequestDTO
+                                                                                                            */
         return ApiRespone.<UserResponeDTO>builder()
                 .result(userService.createUser(createUserRequestDTO))
                 .code(1000)
@@ -55,7 +55,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ApiRespone<UserResponeDTO> updateUser(@RequestBody UpdateUserRequestDTO updateUserRequestDTO, @PathVariable("userId") String userId) {
+    ApiRespone<UserResponeDTO> updateUser(@RequestBody UpdateUserRequestDTO updateUserRequestDTO,
+            @PathVariable("userId") String userId) {
         return ApiRespone.<UserResponeDTO>builder()
                 .result(userService.updateUser(updateUserRequestDTO, userId))
                 .code(1000)
@@ -70,4 +71,5 @@ public class UserController {
                 .code(1000)
                 .build();
     }
+
 }

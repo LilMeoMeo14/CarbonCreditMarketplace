@@ -29,7 +29,6 @@ public class UserService implements IUserService {
     // tao user moi
     @Override
     public UserResponeDTO createUser(CreateUserRequestDTO requestDTO) {
-        // hashpassword
 
         // kiem tra email co nguoi su dung chua
         if (userRepository.existsByEmail(requestDTO.getEmail()))
@@ -37,6 +36,11 @@ public class UserService implements IUserService {
         // kiem tra sdt co nguoi su dung chua
         if (userRepository.existsByPhoneNumber(requestDTO.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
+        // kiem tra password nhap da dung chua
+        if (!(requestDTO.getPassword().equals(requestDTO.getReTypePassword()))) {
+            throw new AppException(ErrorCode.PASSWORD_RETYPE);
+        }
+
         // mapping user
         User user = userMapper.toUser(requestDTO);
         // hashing password

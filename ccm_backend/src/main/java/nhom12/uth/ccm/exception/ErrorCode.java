@@ -7,6 +7,7 @@ public enum ErrorCode {
 
     // Invalid key
     INVALID_MESSAGE_KEY(00001, "Invalid message key"),
+    INVALID_USERREQUEST(00002, "Invalid Uer request"),
 
     // validation
     EMAIL_EXISTED(1001, "EMAIL EXISTED"),
@@ -17,6 +18,7 @@ public enum ErrorCode {
     PHONENUMBER_INVALID(2002, "Phone numer muse be 10 digits"),
     PASSWORD_INVALID(2003, "Passowrd must be 8 - 30 characters long"),
     PASSWORD_INCORRECT(2004, "Password incorrect"),
+    PASSWORD_RETYPE(2005, "Retype password is incorrect"),
 
     // validation not found
     USER_NOT_FOUND(3001, "User not found"),
