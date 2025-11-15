@@ -2,7 +2,8 @@ package nhom12.uth.ccm.service;
 
 
 import nhom12.uth.ccm.dto.request.AuthenticationRequest;
+import nhom12.uth.ccm.dto.respone.AuthenticationResponse;
 
 public interface IAuthenticationService {
-    boolean authenticate(AuthenticationRequest AuthenticationRequest);
+    AuthenticationResponse authenticate(AuthenticationRequest AuthenticationRequest);
 }

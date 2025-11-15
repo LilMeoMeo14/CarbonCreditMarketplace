@@ -1,4 +1,4 @@
-package nhom12.uth.ccm.service;
+package nhom12.uth.ccm.service.implement;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,10 @@ import nhom12.uth.ccm.dto.respone.AuthenticationResponse;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.repository.IUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import nhom12.uth.ccm.service.IAuthenticationService;
+import nhom12.uth.ccm.service.IJwtService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +21,29 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal=true)
 public class AuthenticationService implements IAuthenticationService {
 
-    @Autowired
     IUserRepository userRepository;
-    @Autowired
     PasswordEncoder passwordEncoder;
+    IJwtService  jwtService;
+    AuthenticationManager authenticationManager;
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getEmail(),
+                        authenticationRequest.getPassword()
+                )
+        );
         var user = userRepository.findByEmail(authenticationRequest
                 .getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
-        passwordEncoder.encode(authenticationRequest.getPassword());
-        boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(),user.getPasswordHash());
-        if(!authenticated){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
+
+        // tao token
+        String jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                // .authenticated(true) // <-- Bỏ cái này
+                .token(jwtToken)
+                .build();
     }
 
 }

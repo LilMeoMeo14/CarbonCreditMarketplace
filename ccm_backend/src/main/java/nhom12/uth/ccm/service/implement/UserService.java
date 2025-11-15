@@ -1,4 +1,4 @@
-package nhom12.uth.ccm.service;
+package nhom12.uth.ccm.service.implement;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
 import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
@@ -8,6 +8,7 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
+import nhom12.uth.ccm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

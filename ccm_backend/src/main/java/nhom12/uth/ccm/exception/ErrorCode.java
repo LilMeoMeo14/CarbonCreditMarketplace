@@ -24,6 +24,8 @@ public enum ErrorCode {
     EMAIL_NOT_FOUND(3002,"Email not found"),
     PHONENUMBER_NOT_FOUND(3003,"Phone number not found"),
 
+    //validation error
+    UNAUTHENTICATED(4001,"Unauthorized"),
 
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");
