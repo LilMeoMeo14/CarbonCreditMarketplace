@@ -23,11 +23,15 @@ public class AuthenticationService implements IAuthenticationService {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Override
-    public boolean authenticate(AuthenticationRequest authenticationRequest) {
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         var user = userRepository.findByEmail(authenticationRequest
                 .getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
         passwordEncoder.encode(authenticationRequest.getPassword());
-        return passwordEncoder.matches(authenticationRequest.getPassword(),user.getPasswordHash());
+        boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(),user.getPasswordHash());
+        if(!authenticated){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
     }
+
 }
