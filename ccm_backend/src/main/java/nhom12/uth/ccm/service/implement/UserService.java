@@ -1,4 +1,4 @@
-package nhom12.uth.ccm.service;
+package nhom12.uth.ccm.service.implement;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
 import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
@@ -8,6 +8,8 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
+import nhom12.uth.ccm.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class UserService implements IUserService {
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     // tao user moi
     @Override
     public UserResponeDTO createUser(CreateUserRequestDTO requestDTO) {
@@ -35,7 +38,7 @@ public class UserService implements IUserService {
         if (userRepository.existsByPhoneNumber(requestDTO.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
         // mapping user
-        User user  = userMapper.toUser(requestDTO);
+        User user = userMapper.toUser(requestDTO);
         // hashing password
         String hashedPassword = passwordEncoder.encode(requestDTO.getPassword());
         user.setPasswordHash(hashedPassword);
@@ -55,7 +58,8 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponeDTO getUserById(String userId) {
-        return userMapper.toUserResponeDTO(userRepository.findById(userId).orElseThrow(() ->  new AppException(ErrorCode.USER_NOT_FOUND)));
+        return userMapper.toUserResponeDTO(
+                userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     @Override
@@ -66,11 +70,12 @@ public class UserService implements IUserService {
         userMapper.updateUser(user, updateUserRequestDTO);
 
         // cap nhat email
-        if(updateUserRequestDTO.getEmail() != null
+        if (updateUserRequestDTO.getEmail() != null
                 && !updateUserRequestDTO.getEmail().isEmpty()
-                && !updateUserRequestDTO.getEmail().equals(user.getEmail()))
-        {
-            if(userRepository.existsByEmail(updateUserRequestDTO.getEmail())) // existsByEmail kiem tra xem trong database co ton tai user voi email do khong
+                && !updateUserRequestDTO.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(updateUserRequestDTO.getEmail())) // existsByEmail kiem tra xem trong
+                                                                               // database co ton tai user voi email do
+                                                                               // khong
             {
                 throw new AppException(ErrorCode.EMAIL_EXISTED);
             }
@@ -78,11 +83,10 @@ public class UserService implements IUserService {
         }
 
         // cap nhat phone number
-        if(updateUserRequestDTO.getPhoneNumber() != null
-                &&  !updateUserRequestDTO.getPhoneNumber().isEmpty()
-                && !updateUserRequestDTO.getPhoneNumber().equals(user.getPhoneNumber()))
-        {
-            if(userRepository.existsByPhoneNumber(updateUserRequestDTO.getPhoneNumber())){
+        if (updateUserRequestDTO.getPhoneNumber() != null
+                && !updateUserRequestDTO.getPhoneNumber().isEmpty()
+                && !updateUserRequestDTO.getPhoneNumber().equals(user.getPhoneNumber())) {
+            if (userRepository.existsByPhoneNumber(updateUserRequestDTO.getPhoneNumber())) {
                 throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
             }
             user.setPhoneNumber(updateUserRequestDTO.getPhoneNumber());
