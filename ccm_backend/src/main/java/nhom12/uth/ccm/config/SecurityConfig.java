@@ -39,6 +39,13 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+
+                // Cho phép truy cập tự do vào Swagger UI
+                        .requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers("/auth/**").permitAll() //
                         .anyRequest().authenticated()
                 )
