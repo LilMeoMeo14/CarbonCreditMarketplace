@@ -1,9 +1,5 @@
 package nhom12.uth.ccm.config;
 
-import lombok.RequiredArgsConstructor;
-import nhom12.uth.ccm.exception.AppException;
-import nhom12.uth.ccm.exception.ErrorCode;
-import nhom12.uth.ccm.repository.IUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,17 +49,9 @@ public class SecurityConfig {
 
                 // Phan quyen truy cap (Authentication)
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers("/users", "/auth/generateToken", "/auth/login", "/auth/register", "/swagger-ui/index.html").permitAll()
+                        //
 
-                        // Role-based endpoints // hardcode trong luc lam se sua lai sau
-                        .requestMatchers("/auth/user/**").hasAuthority("ROLE_EV_OWNER")
-                        .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
-                        // .requestMatchers().hasAuthority("ROLE_BUYER")
-                        // .requestMatchers().hasAuthority("ROLE_CVA")
-
-                        // All other endpoints require authentication
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
 
                 // Quan ly session (required for JWT)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
