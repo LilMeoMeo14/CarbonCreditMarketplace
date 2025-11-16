@@ -79,6 +79,16 @@ public class EvProfileController {
         return ApiRespone.<EvProfileResponse>builder().result(result).build();
     }
 
+    // xoa profile
+    @DeleteMapping("/{profileId}")
+    public ApiRespone<String> deleteEvProfile(@PathVariable Long profileId) {
+
+        String userId = getAuthenticatedUserId();
+
+        evProfileService.deleteEvProfile(profileId, userId);
+        return ApiRespone.<String>builder().result("EV Profile deleted successfully.").build();
+    }
+
     // lay userId tu token
     private String getAuthenticatedUserId() {
         // lay thong tin xac thuc tu spring security

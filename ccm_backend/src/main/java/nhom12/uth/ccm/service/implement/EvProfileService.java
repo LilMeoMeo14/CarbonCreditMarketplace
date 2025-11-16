@@ -83,8 +83,10 @@ public class EvProfileService implements IEvProfileService {
 
     @Override
     public void deleteEvProfile(Long evProfileId, String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteEvProfile'");
+        EVProfile profile = evProfileRepository.findByEvProfileIdAndUser_UserId(evProfileId, userId)
+                .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
+
+        evProfileRepository.delete(profile);
     }
 
 }
