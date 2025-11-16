@@ -1,4 +1,4 @@
-package nhom12.uth.ccm.dto.respone;
+package nhom12.uth.ccm.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

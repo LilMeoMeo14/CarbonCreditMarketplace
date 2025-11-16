@@ -1,8 +1,5 @@
-package nhom12.uth.ccm.dto.respone;
+package nhom12.uth.ccm.dto.response;
 
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import nhom12.uth.ccm.model.enums.UserRole;
@@ -13,7 +10,7 @@ import nhom12.uth.ccm.model.enums.UserStatus;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponeDTO {
+public class UserResponse {
     String userId;
     String password;
     String email;
@@ -22,5 +19,4 @@ public class UserResponeDTO {
     String lastName;
     UserRole role;
     UserStatus status;
-
 }

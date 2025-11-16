@@ -7,9 +7,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@JsonInclude(JsonInclude.Include.NON_NULL)// khong them cac file null vao api tra ve
+@JsonInclude(JsonInclude.Include.NON_NULL) // khong them cac file null vao api tra ve
 @Builder
-public class ApiRespone <T> {
+
+public class ApiRespone<T> {
+    @Builder.Default
     private int code = 1001;
     private String message;
     private T result;

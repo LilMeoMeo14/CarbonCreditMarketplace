@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import nhom12.uth.ccm.dto.request.AuthenticationRequest;
-import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
-import nhom12.uth.ccm.dto.respone.AuthenticationResponse;
+import nhom12.uth.ccm.dto.request.CreateUserRequest;
+import nhom12.uth.ccm.dto.response.AuthenticationResponse;
 import nhom12.uth.ccm.exception.ApiRespone;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
@@ -49,7 +49,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    ApiRespone<AuthenticationResponse> register(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
+    ApiRespone<AuthenticationResponse> register(@RequestBody CreateUserRequest createUserRequestDTO) {
         /*
          * Luong hoat dong
          * 1. Kiem tra email

@@ -1,8 +1,8 @@
 package nhom12.uth.ccm.controller;
 
-import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
-import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
-import nhom12.uth.ccm.dto.respone.UserResponeDTO;
+import nhom12.uth.ccm.dto.request.CreateUserRequest;
+import nhom12.uth.ccm.dto.request.UpdateUserRequest;
+import nhom12.uth.ccm.dto.response.UserResponse;
 import nhom12.uth.ccm.exception.ApiRespone;
 import nhom12.uth.ccm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,42 +22,42 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ApiRespone<UserResponeDTO> createUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) { /*
-                                                                                                            * anotation
-                                                                                                            * valid
-                                                                                                            * thong bao
-                                                                                                            * cho spring
-                                                                                                            * biet la
-                                                                                                            * can phai
-                                                                                                            * validate
-                                                                                                            * CreateUserRequestDTO
-                                                                                                            */
-        return ApiRespone.<UserResponeDTO>builder()
+    ApiRespone<UserResponse> createUser(@RequestBody @Valid CreateUserRequest createUserRequestDTO) { /*
+                                                                                                       * anotation
+                                                                                                       * valid
+                                                                                                       * thong bao
+                                                                                                       * cho spring
+                                                                                                       * biet la
+                                                                                                       * can phai
+                                                                                                       * validate
+                                                                                                       * CreateUserRequestDTO
+                                                                                                       */
+        return ApiRespone.<UserResponse>builder()
                 .result(userService.createUser(createUserRequestDTO))
                 .code(1000)
                 .build();
     }
 
     @GetMapping
-    ApiRespone<List<UserResponeDTO>> getAllUsers() {
-        return ApiRespone.<List<UserResponeDTO>>builder()
+    ApiRespone<List<UserResponse>> getAllUsers() {
+        return ApiRespone.<List<UserResponse>>builder()
                 .result(userService.getUsers())
                 .code(1000)
                 .build();
     }
 
     @GetMapping("/{userId}")
-    ApiRespone<UserResponeDTO> getUserById(@PathVariable("userId") String userId) {
-        return ApiRespone.<UserResponeDTO>builder()
+    ApiRespone<UserResponse> getUserById(@PathVariable("userId") String userId) {
+        return ApiRespone.<UserResponse>builder()
                 .result(userService.getUserById(userId))
                 .code(1000)
                 .build();
     }
 
     @PutMapping("/{userId}")
-    ApiRespone<UserResponeDTO> updateUser(@RequestBody UpdateUserRequestDTO updateUserRequestDTO,
+    ApiRespone<UserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequestDTO,
             @PathVariable("userId") String userId) {
-        return ApiRespone.<UserResponeDTO>builder()
+        return ApiRespone.<UserResponse>builder()
                 .result(userService.updateUser(updateUserRequestDTO, userId))
                 .code(1000)
                 .build();

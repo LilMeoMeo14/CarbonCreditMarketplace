@@ -1,8 +1,8 @@
 package nhom12.uth.ccm.service.implement;
 
-import nhom12.uth.ccm.dto.request.CreateUserRequestDTO;
-import nhom12.uth.ccm.dto.request.UpdateUserRequestDTO;
-import nhom12.uth.ccm.dto.respone.UserResponeDTO;
+import nhom12.uth.ccm.dto.request.CreateUserRequest;
+import nhom12.uth.ccm.dto.request.UpdateUserRequest;
+import nhom12.uth.ccm.dto.response.UserResponse;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.mapper.UserMapper;
@@ -27,7 +27,7 @@ public class UserService implements IUserService {
 
     // tao user moi
     @Override
-    public UserResponeDTO createUser(CreateUserRequestDTO requestDTO) {
+    public UserResponse createUser(CreateUserRequest requestDTO) {
 
         // kiem tra email co nguoi su dung chua
         if (userRepository.existsByEmail(requestDTO.getEmail()))
@@ -50,7 +50,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserResponeDTO> getUsers() {
+    public List<UserResponse> getUsers() {
 
         return userRepository
                 .findAll()
@@ -60,13 +60,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserResponeDTO getUserById(String userId) {
+    public UserResponse getUserById(String userId) {
         return userMapper.toUserResponeDTO(
                 userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     @Override
-    public UserResponeDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO, String userId) {
+    public UserResponse updateUser(UpdateUserRequest updateUserRequestDTO, String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         // mapper nay cau hinh de bo qua truong email va phone

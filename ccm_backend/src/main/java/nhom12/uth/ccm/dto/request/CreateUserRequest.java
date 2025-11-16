@@ -13,7 +13,7 @@ import nhom12.uth.ccm.model.enums.UserStatus;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateUserRequestDTO {
+public class CreateUserRequest {
     @Email(message = "invalid email")
     private String email;
     @Size(min = 8, max = 30, message = "PASSWORD_INVALID")

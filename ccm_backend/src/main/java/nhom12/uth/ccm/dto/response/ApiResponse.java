@@ -1,4 +1,4 @@
-package nhom12.uth.ccm.dto.respone;
+package nhom12.uth.ccm.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -13,18 +13,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL) // Quan trọng: Giấu các trường null (ví dụ lỗi thì giấu data, thành công thì giấu errors)
+@JsonInclude(JsonInclude.Include.NON_NULL) // Quan trọng: Giấu các trường null (ví dụ lỗi thì giấu data, thành công thì
+                                           // giấu errors)
 public class ApiResponse<T> {
-    
+
     private boolean success;
     private String message;
-    
+
     // Dùng cho data trả về khi thành công (Object, List, ...)
     private T data;
-    
+
     // Dùng cho danh sách lỗi khi validate form (nếu có)
     private List<ValidationError> errors;
-    
+
     @Builder.Default
     private String timestamp = LocalDateTime.now().toString();
 
