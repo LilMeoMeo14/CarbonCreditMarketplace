@@ -17,7 +17,7 @@ public interface IEvProfileService {
     EvProfileResponse getEvProfileById(Long evProfileId, String userId);
 
     // cap nhat 1 ho so xe theo id
-    EvProfileResponse updateEvProfle(Long evProfileId, String userId);
+    EvProfileResponse updateEvProfle(Long profileId, EvProfileRequest evProfileRequest, String userId);
 
     // Xoa ho so 1 xe
     void deleteEvProfile(Long evProfileId, String userId);

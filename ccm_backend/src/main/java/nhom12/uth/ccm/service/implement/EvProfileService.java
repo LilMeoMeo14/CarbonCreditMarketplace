@@ -67,9 +67,18 @@ public class EvProfileService implements IEvProfileService {
     }
 
     @Override
-    public EvProfileResponse updateEvProfle(Long evProfileId, String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateEvProfle'");
+    public EvProfileResponse updateEvProfle(Long profileId, EvProfileRequest evProfileRequest, String userId) {
+        EVProfile existingProfile = evProfileRepository.findByEvProfileIdAndUser_UserId(profileId, userId)
+                .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
+
+        evProfileMapper.updateEvProfile(existingProfile, evProfileRequest);
+
+        // sau khi cap nhat thong tin thi o trang thai pending de cva duyet
+        existingProfile.setVerificationStatus(VerificationStatus.PENDING);
+
+        EVProfile updatedProfile = evProfileRepository.save(existingProfile);
+
+        return evProfileMapper.toEvProfileResponse(updatedProfile);
     }
 
     @Override

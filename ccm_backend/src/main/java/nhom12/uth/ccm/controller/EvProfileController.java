@@ -67,6 +67,18 @@ public class EvProfileController {
         return ApiRespone.<EvProfileResponse>builder().result(result).build();
     }
 
+    // update profile
+    @PutMapping("/{profileId}")
+    public ApiRespone<EvProfileResponse> updateEvProfile(
+            @PathVariable Long profileId,
+            @RequestBody @Valid EvProfileRequest evProfileRequest) {
+
+        String userId = getAuthenticatedUserId();
+
+        EvProfileResponse result = evProfileService.updateEvProfle(profileId, evProfileRequest, userId);
+        return ApiRespone.<EvProfileResponse>builder().result(result).build();
+    }
+
     // lay userId tu token
     private String getAuthenticatedUserId() {
         // lay thong tin xac thuc tu spring security
