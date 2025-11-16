@@ -1,18 +1,14 @@
 package nhom12.uth.ccm.exception;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-
+import org.springframework.web.bind.annotation.RestControllerAdvice; // Đổi từ @ControllerAdvice sang @RestControllerAdvice cho chuẩn REST
 
 @Slf4j
-@ControllerAdvice
-// anotation de thong bao cho spring biet day la noi chua tat ca cac exception
+@RestControllerAdvice // anotation de thong bao cho spring biet day la noi chua tat ca cac exception
 public class GlobalExceptionHandler {
 
     // Xử lý lỗi RuntimeException
