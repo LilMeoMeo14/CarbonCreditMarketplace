@@ -1,10 +1,7 @@
 package nhom12.uth.ccm.controller;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import jakarta.validation.Valid;
@@ -17,6 +14,9 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IEvProfileService;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +28,13 @@ public class EvProfileController {
     private final IUserRepository userRepository;
 
     // debug
-    private static final Logger log = LoggerFactory.getLogger(EvProfileController.class);
+    // private static final Logger log =
+    // LoggerFactory.getLogger(EvProfileController.class);
     @PostMapping
     public ApiRespone<EvProfileResponse> createEvProfile(@RequestBody @Valid EvProfileRequest evProfileRequest) {
-        log.info("====> 1. CONTROLLER: Received EvProfileRequest: {}", evProfileRequest.toString());
+        // debug
+        // log.info("====> 1. CONTROLLER: Received EvProfileRequest: {}",
+        // evProfileRequest.toString());
 
         // lay userid
         String userId = getAuthenticatedUserId();
@@ -40,6 +43,16 @@ public class EvProfileController {
         return ApiRespone.<EvProfileResponse>builder()
                 .result(evProfileResponse)
                 .code(1000)
+                .build();
+    }
+
+    // lay tat ca xe user dang nhap
+    @GetMapping("/my-vehicles")
+    public ApiRespone<List<EvProfileResponse>> getAllEvProfiles() {
+        String userId = getAuthenticatedUserId();
+        List<EvProfileResponse> listEvProfileResponses = evProfileService.getAllEvProfile(userId);
+        return ApiRespone.<List<EvProfileResponse>>builder()
+                .result(listEvProfileResponses)
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.service.implement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,9 +50,12 @@ public class EvProfileService implements IEvProfileService {
     }
 
     @Override
-    public List<EvProfileResponse> getAllEvProfile(EvProfileRequest evProfileRequest, String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllEvProfile'");
+    public List<EvProfileResponse> getAllEvProfile(String userId) {
+        List<EVProfile> evProfiles = evProfileRepository.findByUser_UserId(userId);
+        return evProfiles.stream()
+                .map(evProfileMapper::toEvProfileResponse)
+                .collect(Collectors.toList());
+
     }
 
     @Override

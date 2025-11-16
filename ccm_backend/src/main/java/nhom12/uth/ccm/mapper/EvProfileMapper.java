@@ -27,6 +27,5 @@ public interface EvProfileMapper {
     @Mapping(target = "verificationStatus", ignore = true)
     @Mapping(target = "carbonSavings", ignore = true)
     @Mapping(target = "creditRequests", ignore = true)
-    // cap nhat entity voi dto
     void updateEvProfile(@MappingTarget EVProfile evProfile, EvProfileRequest evProfileRequest);
 }

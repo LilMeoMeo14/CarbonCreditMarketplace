@@ -11,7 +11,7 @@ public interface IEvProfileService {
     EvProfileResponse createEvProfile(EvProfileRequest evProfileRequest, String userId);
 
     // lay tat ca cac xe cua user
-    List<EvProfileResponse> getAllEvProfile(EvProfileRequest evProfileRequest, String userId);
+    List<EvProfileResponse> getAllEvProfile(String userId);
 
     // lay 1 ho so xe theo Id
     EvProfileResponse getEvProfileById(Long evProfileId, String userId);
