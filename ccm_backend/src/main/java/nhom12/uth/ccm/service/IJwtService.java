@@ -1,19 +1,56 @@
 package nhom12.uth.ccm.service;
 
-import io.jsonwebtoken.Claims;
-import nhom12.uth.ccm.dto.request.AuthenticationRequest;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Date;
 
-import java.util.Map;
 import java.util.function.Function;
 
-// token generate
+import org.springframework.security.core.userdetails.UserDetails;
+
+import io.jsonwebtoken.Claims;
+
 public interface IJwtService {
-     String extractUserEmail(String token);
-     String extractUserId(String token);
-     <T> T extractClaims(String token, Function<Claims, T> claimsResolver);
-     String generateToken(UserDetails userDetails);
-     String generateToken(Map<String, Object> extraClaims, UserDetails userDetails );
-     boolean isTokenValid(String token,UserDetails userDetails);
+
+    /**
+     * Tạo ra một JWT token mới dựa trên email (username).
+     *
+     * @param email Email của người dùng
+     * @return Chuỗi JWT
+     */
+    String generateToken(String email);
+
+    /**
+     * Trích xuất username (email) từ 'sub' claim của token.
+     *
+     * @param token Chuỗi JWT
+     * @return Email (username)
+     */
+    String extractUsername(String token);
+
+    /**
+     * Trích xuất thời gian hết hạn từ token.
+     *
+     * @param token Chuỗi JWT
+     * @return Ngày hết hạn
+     */
+    Date extractExpiration(String token);
+
+    /**
+     * Trích xuất một claim (trường) cụ thể từ payload của token.
+     *
+     * @param token          Chuỗi JWT
+     * @param claimsResolver Một function để chỉ định claim nào cần lấy
+     * @param <T>            Kiểu dữ liệu của claim (ví dụ: String, Date)
+     * @return Giá trị của claim
+     */
+    <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
+
+    /**
+     * Kiểm tra xem token có hợp lệ không (so với UserDetails).
+     *
+     * @param token       Chuỗi JWT
+     * @param userDetails Đối tượng UserDetails (lấy từ DB)
+     * @return True nếu token hợp lệ, False nếu không
+     */
+    Boolean validateToken(String token, UserDetails userDetails);
 
 }

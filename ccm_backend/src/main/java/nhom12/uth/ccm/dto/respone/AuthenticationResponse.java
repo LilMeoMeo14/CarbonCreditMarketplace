@@ -10,8 +10,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationResponse {
     /*
-    * Checking email & password
-    * Return True if email & password is correct
-    * */
+     * Checking email & password
+     * Return True if email & password is correct
+     */
+    Boolean success;
     String token;
 }

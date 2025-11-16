@@ -24,10 +24,10 @@ public class UserService implements IUserService {
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     // tao user moi
     @Override
     public UserResponeDTO createUser(CreateUserRequestDTO requestDTO) {
-        // hashpassword
 
         // kiem tra email co nguoi su dung chua
         if (userRepository.existsByEmail(requestDTO.getEmail()))
@@ -35,8 +35,13 @@ public class UserService implements IUserService {
         // kiem tra sdt co nguoi su dung chua
         if (userRepository.existsByPhoneNumber(requestDTO.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
+        // kiem tra password nhap da dung chua
+        if (!(requestDTO.getPassword().equals(requestDTO.getReTypePassword()))) {
+            throw new AppException(ErrorCode.PASSWORD_RETYPE);
+        }
+
         // mapping user
-        User user  = userMapper.toUser(requestDTO);
+        User user = userMapper.toUser(requestDTO);
         // hashing password
         String hashedPassword = passwordEncoder.encode(requestDTO.getPassword());
         user.setPasswordHash(hashedPassword);
@@ -56,7 +61,8 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponeDTO getUserById(String userId) {
-        return userMapper.toUserResponeDTO(userRepository.findById(userId).orElseThrow(() ->  new AppException(ErrorCode.USER_NOT_FOUND)));
+        return userMapper.toUserResponeDTO(
+                userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     @Override
@@ -67,11 +73,12 @@ public class UserService implements IUserService {
         userMapper.updateUser(user, updateUserRequestDTO);
 
         // cap nhat email
-        if(updateUserRequestDTO.getEmail() != null
+        if (updateUserRequestDTO.getEmail() != null
                 && !updateUserRequestDTO.getEmail().isEmpty()
-                && !updateUserRequestDTO.getEmail().equals(user.getEmail()))
-        {
-            if(userRepository.existsByEmail(updateUserRequestDTO.getEmail())) // existsByEmail kiem tra xem trong database co ton tai user voi email do khong
+                && !updateUserRequestDTO.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(updateUserRequestDTO.getEmail())) // existsByEmail kiem tra xem trong
+                                                                               // database co ton tai user voi email do
+                                                                               // khong
             {
                 throw new AppException(ErrorCode.EMAIL_EXISTED);
             }
@@ -79,11 +86,10 @@ public class UserService implements IUserService {
         }
 
         // cap nhat phone number
-        if(updateUserRequestDTO.getPhoneNumber() != null
-                &&  !updateUserRequestDTO.getPhoneNumber().isEmpty()
-                && !updateUserRequestDTO.getPhoneNumber().equals(user.getPhoneNumber()))
-        {
-            if(userRepository.existsByPhoneNumber(updateUserRequestDTO.getPhoneNumber())){
+        if (updateUserRequestDTO.getPhoneNumber() != null
+                && !updateUserRequestDTO.getPhoneNumber().isEmpty()
+                && !updateUserRequestDTO.getPhoneNumber().equals(user.getPhoneNumber())) {
+            if (userRepository.existsByPhoneNumber(updateUserRequestDTO.getPhoneNumber())) {
                 throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
             }
             user.setPhoneNumber(updateUserRequestDTO.getPhoneNumber());
