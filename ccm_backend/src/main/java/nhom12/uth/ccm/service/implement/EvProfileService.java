@@ -2,6 +2,7 @@ package nhom12.uth.ccm.service.implement;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import nhom12.uth.ccm.dto.request.EvProfileRequest;
@@ -17,11 +18,12 @@ import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IEvProfileService;
 
 @Service
+@RequiredArgsConstructor
 public class EvProfileService implements IEvProfileService {
 
-    private IUserRepository userRepository;
-    private IEvProfileRepository evProfileRepository;
-    private EvProfileMapper evProfileMapper;
+    private final IUserRepository userRepository;
+    private final IEvProfileRepository evProfileRepository;
+    private final EvProfileMapper evProfileMapper;
 
     @Override
     public EvProfileResponse createEvProfile(EvProfileRequest evProfileRequest, String userId) {
@@ -42,7 +44,7 @@ public class EvProfileService implements IEvProfileService {
         evProfile.setUser(user);
 
         evProfile.setVerificationStatus(VerificationStatus.PENDING);
-
+        System.out.println(evProfile.getLicensePlate());
         return evProfileMapper.toEvProfileResponse(evProfileRepository.save(evProfile));
     }
 

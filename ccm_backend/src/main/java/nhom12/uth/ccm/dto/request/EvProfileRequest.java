@@ -14,23 +14,22 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class EvProfileRequest {
 
     // hang xe
-    String vehicleModel;
+    private String vehicleModel;
 
     // bien so xe
-    String licensePlate;
+    private String licensePlate;
 
     // dung luong pin
-    BigDecimal batteryCapacityKwh;
+    private BigDecimal batteryCapacityKwh;
 
     // ngay dang ky
-    LocalDate registrationDate;
+    private LocalDate registrationDate;
 
     // tai lieu ve xe(link bang lai xe ,.....)
-    String verificationDocumentUrl;
+    private String verificationDocumentUrl;
 
 }

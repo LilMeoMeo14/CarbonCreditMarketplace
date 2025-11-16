@@ -2,11 +2,11 @@ package nhom12.uth.ccm.controller;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nhom12.uth.ccm.dto.request.ApiRespone;
@@ -17,16 +17,22 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IEvProfileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/ev-profiles")
 @RequiredArgsConstructor
 public class EvProfileController {
-    private IEvProfileService evProfileService;
-    private IUserRepository userRepository;
+    private final IEvProfileService evProfileService;
+    private final IUserRepository userRepository;
 
+    // debug
+    private static final Logger log = LoggerFactory.getLogger(EvProfileController.class);
     @PostMapping
     public ApiRespone<EvProfileResponse> createEvProfile(@RequestBody @Valid EvProfileRequest evProfileRequest) {
+        log.info("====> 1. CONTROLLER: Received EvProfileRequest: {}", evProfileRequest.toString());
+
         // lay userid
         String userId = getAuthenticatedUserId();
         EvProfileResponse evProfileResponse = evProfileService.createEvProfile(evProfileRequest, userId);
