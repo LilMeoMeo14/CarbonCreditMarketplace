@@ -56,6 +56,17 @@ public class EvProfileController {
                 .build();
     }
 
+    // lay xe theo id
+    @GetMapping("/{profileId}")
+    public ApiRespone<EvProfileResponse> getEvProfileById(
+            @PathVariable Long profileId) {
+
+        String userId = getAuthenticatedUserId();
+
+        EvProfileResponse result = evProfileService.getEvProfileById(profileId, userId);
+        return ApiRespone.<EvProfileResponse>builder().result(result).build();
+    }
+
     // lay userId tu token
     private String getAuthenticatedUserId() {
         // lay thong tin xac thuc tu spring security

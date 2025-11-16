@@ -60,8 +60,10 @@ public class EvProfileService implements IEvProfileService {
 
     @Override
     public EvProfileResponse getEvProfileById(Long evProfileId, String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getEvProfileById'");
+        EVProfile profile = evProfileRepository.findByEvProfileIdAndUser_UserId(evProfileId, userId)
+                .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
+
+        return evProfileMapper.toEvProfileResponse(profile);
     }
 
     @Override

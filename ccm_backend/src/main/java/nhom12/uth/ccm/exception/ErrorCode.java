@@ -24,6 +24,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(3001, "User not found"),
     EMAIL_NOT_FOUND(3002, "Email not found"),
     PHONENUMBER_NOT_FOUND(3003, "Phone number not found"),
+    EV_PROFILE_NOT_FOUND(3004, "Vehicle not found"),
 
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
