@@ -7,16 +7,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nhom12.uth.ccm.dto.request.ApiRespone;
+import nhom12.uth.ccm.dto.request.CarbonSavingRequest;
 import nhom12.uth.ccm.dto.request.EvProfileRequest;
+import nhom12.uth.ccm.dto.response.CarbonSavingResponse;
 import nhom12.uth.ccm.dto.response.EvProfileResponse;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
+import nhom12.uth.ccm.service.ICarbonSavingService;
 import nhom12.uth.ccm.service.IEvProfileService;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ import org.slf4j.LoggerFactory;
 public class EvProfileController {
     private final IEvProfileService evProfileService;
     private final IUserRepository userRepository;
+    private final ICarbonSavingService carbonSavingService;
 
     // debug
     // private static final Logger log =
@@ -87,6 +90,40 @@ public class EvProfileController {
 
         evProfileService.deleteEvProfile(profileId, userId);
         return ApiRespone.<String>builder().result("EV Profile deleted successfully.").build();
+    }
+
+    // Carbon saving // theo dõi phát thải
+
+    /*
+     * API Gửi báo cáo quãng đường (tạo Carbon Saving) cho 1 xe.
+     */
+    @PostMapping("/{profileId}/carbon-saving")
+    public ApiRespone<CarbonSavingResponse> createCarbonSaving(@PathVariable Long profileId,
+            @RequestBody @Valid CarbonSavingRequest carbonSavingRequest) {
+
+        // lay user tu token
+
+        String userId = getAuthenticatedUserId();
+
+        CarbonSavingResponse carbonSavingResponse = carbonSavingService.createCarbonSaving(profileId,
+                carbonSavingRequest, userId);
+        return ApiRespone.<CarbonSavingResponse>builder()
+                .result(carbonSavingResponse)
+                .build();
+    }
+
+    /*
+     * API lấy tất cả bản ghi carbon savings của 1 xe
+     */
+
+    @GetMapping("/{profileId}/carbon-saving")
+    public ApiRespone<List<CarbonSavingResponse>> getCarbonSavingsForProfile(@PathVariable Long profileId) {
+        String userId = getAuthenticatedUserId();
+        List<CarbonSavingResponse> carbonSavingResponses = carbonSavingService.getCarbonSavingsForProfile(profileId,
+                userId);
+        return ApiRespone.<List<CarbonSavingResponse>>builder()
+                .result(carbonSavingResponses)
+                .build();
     }
 
     // lay userId tu token
