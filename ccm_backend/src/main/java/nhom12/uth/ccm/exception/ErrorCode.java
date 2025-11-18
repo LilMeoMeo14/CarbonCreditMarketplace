@@ -28,6 +28,7 @@ public enum ErrorCode {
 
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
+    INVALID_VERIFICATION_STATUS(4002, "Invalid verification status"),
 
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nhom12.uth.ccm.model.enums.VerificationStatus;
+import nhom12.uth.ccm.model.EvDocument;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,4 +47,9 @@ public class EVProfile {
         @OneToMany(mappedBy = "evProfile", // "evProfile" là tên trường EVProfile bên class CarbonCreditRequest
                         cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
         private List<CarbonCreditRequest> creditRequests = new ArrayList<>();
+        @OneToMany(mappedBy = "evProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        private List<EvDocument> documents = new ArrayList<>();
+       
+
+
 }

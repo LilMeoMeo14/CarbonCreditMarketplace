@@ -1,10 +1,13 @@
 package nhom12.uth.ccm.service.implement;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.DocumentType;
 
 import nhom12.uth.ccm.dto.request.EvProfileRequest;
 import nhom12.uth.ccm.dto.response.EvProfileResponse;
@@ -14,9 +17,13 @@ import nhom12.uth.ccm.mapper.EvProfileMapper;
 import nhom12.uth.ccm.model.EVProfile;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.model.enums.VerificationStatus;
+import nhom12.uth.ccm.model.enums.UserRole;
+import nhom12.uth.ccm.repository.IEvDocumentRepository;
 import nhom12.uth.ccm.repository.IEvProfileRepository;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IEvProfileService;
+import nhom12.uth.ccm.model.EvDocument;
+import nhom12.uth.ccm.model.enums.EvDocumentType;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +32,8 @@ public class EvProfileService implements IEvProfileService {
     private final IUserRepository userRepository;
     private final IEvProfileRepository evProfileRepository;
     private final EvProfileMapper evProfileMapper;
+    private final IEvDocumentRepository evDocumentRepository;
+    private final FileStorageService fileStorageService;
 
     @Override
     public EvProfileResponse createEvProfile(EvProfileRequest evProfileRequest, String userId) {
@@ -88,5 +97,46 @@ public class EvProfileService implements IEvProfileService {
 
         evProfileRepository.delete(profile);
     }
+
+    public EvProfileResponse verifyEvProfile(Long profileId, VerificationStatus status, String verifierId) {
+        EVProfile profile = evProfileRepository.findById(profileId)
+            .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
+
+        User verifier = userRepository.findById(verifierId)
+            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+    // Kiểm tra quyền: chỉ CVA hoặc ADMIN mới được verify
+    if (!(verifier.getUserRole() == UserRole.CVA || verifier.getUserRole() == UserRole.ADMIN)) {
+        throw new AppException(ErrorCode.UNAUTHENTICATED);
+    }
+
+    if (status == VerificationStatus.PENDING) {
+        throw new AppException(ErrorCode.INVALID_VERIFICATION_STATUS);
+    }
+
+    profile.setVerificationStatus(status);
+    EVProfile updated = evProfileRepository.save(profile);
+
+    return evProfileMapper.toEvProfileResponse(updated);
+}
+
+    public EvDocument uploadDocument(Long profileId, MultipartFile file, EvDocumentType type, String userId) {
+        EVProfile profile = evProfileRepository.findByEvProfileIdAndUser_UserId(profileId, userId)
+            .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
+
+    // Lưu file bằng FileStorageService từ Vũ
+    String fileUrl = fileStorageService.storeFile(file, "ev-docs/" + profileId);
+
+    EvDocument document = new EvDocument();
+    document.setEvProfile(profile);
+    document.setFileName(file.getOriginalFilename());
+    document.setFileUrl(fileUrl);
+    document.setType(type);
+    document.setUploadedAt(LocalDateTime.now());
+
+    return evDocumentRepository.save(document);
+}
+
+
 
 }

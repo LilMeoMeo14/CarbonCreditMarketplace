@@ -1,5 +1,7 @@
 package nhom12.uth.ccm.config;
 
+import java.util.stream.Collectors;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +11,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -87,4 +92,31 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+    
+    public class UserPrincipal implements UserDetails {
+    private final User user;
+
+    public UserPrincipal(User user) { this.user = user; }
+
+    public String getUserId() { return user.getUserId(); }
+    public String getEmail() { return user.getEmail(); }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<String> roles = user.getRoles(); // ví dụ: ["CVA","ADMIN","EV_OWNER"]
+        return roles == null ? Set.of() :
+            roles.stream()
+                 .map(r -> "ROLE_" + r) // thêm tiền tố ROLE_ để dùng hasRole(...)
+                 .map(SimpleGrantedAuthority::new)
+                 .collect(Collectors.toSet());
+    }
+
+    @Override public String getPassword() { return user.getPassword(); }
+    @Override public String getUsername() { return user.getEmail(); }
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
+}
 }

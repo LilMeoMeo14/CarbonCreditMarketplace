@@ -2,8 +2,14 @@ package nhom12.uth.ccm.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.DocumentType;
+
 import nhom12.uth.ccm.dto.request.EvProfileRequest;
 import nhom12.uth.ccm.dto.response.EvProfileResponse;
+import nhom12.uth.ccm.model.enums.VerificationStatus;
+import nhom12.uth.ccm.model.EvDocument;
+import nhom12.uth.ccm.model.enums.EvDocumentType;
 
 public interface IEvProfileService {
 
@@ -21,5 +27,11 @@ public interface IEvProfileService {
 
     // Xoa ho so 1 xe
     void deleteEvProfile(Long evProfileId, String userId);
+
+    // Verify EV Profile
+    EvProfileResponse verifyEvProfile(Long profileId, VerificationStatus status, String verifierId);
+
+     // Upload document for EV Profile
+    EvDocument uploadDocument(Long profileId, MultipartFile file, EvDocumentType type, String userId);
 
 }
