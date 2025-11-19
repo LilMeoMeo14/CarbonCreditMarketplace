@@ -19,8 +19,11 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "payment_transaction")
+@Getter
+@Setter
 @NoArgsConstructor
-
+@AllArgsConstructor
+@Builder
 public class PaymentTransaction {
 
     /**

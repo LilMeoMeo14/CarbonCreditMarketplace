@@ -25,9 +25,16 @@ public enum ErrorCode {
     EMAIL_NOT_FOUND(3002, "Email not found"),
     PHONENUMBER_NOT_FOUND(3003, "Phone number not found"),
     EV_PROFILE_NOT_FOUND(3004, "Vehicle not found"),
+    CARBON_WALLET_NOT_FOUND(3005, "Carbon wallet not found"),
+    EWALLET_NOT_FOUND(3006, "E-wallet not found"),
+    PAYMENT_TRANSACTION_NOT_FOUND(3007, "Payment transaction not found"),
 
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
+    INSUFFICIENT_BALANCE(4002, "Insufficient balance"),
+    INVALID_AMOUNT(4003, "Invalid amount"),
+    INVALID_SIGNATURE(4004, "Invalid webhook signature"),
+    PAYMENT_ALREADY_PROCESSED(4005, "Payment transaction already processed"),
 
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");
