@@ -2,6 +2,8 @@ package nhom12.uth.ccm.service.implement;
 
 import nhom12.uth.ccm.dto.request.CreateUserRequest;
 import nhom12.uth.ccm.dto.request.UpdateUserRequest;
+import nhom12.uth.ccm.dto.request.ChangePasswordRequest;
+import nhom12.uth.ccm.dto.request.UpdateProfileRequest;
 import nhom12.uth.ccm.dto.response.UserResponse;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
@@ -9,9 +11,11 @@ import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IUserService;
+import nhom12.uth.ccm.service.TokenBlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +28,8 @@ public class UserService implements IUserService {
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     // tao user moi
     @Override
@@ -76,10 +82,7 @@ public class UserService implements IUserService {
         if (updateUserRequestDTO.getEmail() != null
                 && !updateUserRequestDTO.getEmail().isEmpty()
                 && !updateUserRequestDTO.getEmail().equals(user.getEmail())) {
-            if (userRepository.existsByEmail(updateUserRequestDTO.getEmail())) // existsByEmail kiem tra xem trong
-                                                                               // database co ton tai user voi email do
-                                                                               // khong
-            {
+            if (userRepository.existsByEmail(updateUserRequestDTO.getEmail())) {
                 throw new AppException(ErrorCode.EMAIL_EXISTED);
             }
             user.setEmail(updateUserRequestDTO.getEmail());
@@ -102,5 +105,63 @@ public class UserService implements IUserService {
     public void deleteUserById(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
+    }
+
+    @Override
+    public UserResponse getProfile(String userId) {
+        return getUserById(userId);
+    }
+
+    @Override
+    public UserResponse updateProfile(String userId, UpdateProfileRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        
+        if (request.getFirstName() != null && !request.getFirstName().trim().isEmpty()) {
+            user.setFirstName(request.getFirstName().trim());
+        }
+        
+        if (request.getLastName() != null && !request.getLastName().trim().isEmpty()) {
+            user.setLastName(request.getLastName().trim());
+        }
+        
+        if (request.getPhoneNumber() != null && !request.getPhoneNumber().trim().isEmpty()) {
+            String newPhone = request.getPhoneNumber().trim();
+            if (!newPhone.equals(user.getPhoneNumber())) {
+                if (userRepository.existsByPhoneNumber(newPhone)) {
+                    throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
+                }
+                user.setPhoneNumber(newPhone);
+            }
+        }
+        
+        User updatedUser = userRepository.save(user);
+        return userMapper.toUserResponeDTO(updatedUser);
+    }
+
+    @Override
+    public void changePassword(String userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+            throw new AppException(ErrorCode.PASSWORD_INCORRECT);
+        }
+        
+        if (request.getNewPassword() == null || request.getNewPassword().length() < 6) {
+            throw new AppException(ErrorCode.PASSWORD_INVALID);
+        }
+        
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public UserResponse uploadAvatar(String userId, MultipartFile file) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toUserResponeDTO(user);
+    }
+
+    @Override
+    public void logout(String token) {
+        tokenBlacklistService.addToBlacklist(token);
     }
 }
