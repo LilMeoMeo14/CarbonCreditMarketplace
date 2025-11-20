@@ -17,6 +17,7 @@ import nhom12.uth.ccm.model.enums.VerificationStatus;
 import nhom12.uth.ccm.repository.IEvProfileRepository;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IEvProfileService;
+import nhom12.uth.ccm.service.IStorageService;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ public class EvProfileService implements IEvProfileService {
     private final IUserRepository userRepository;
     private final IEvProfileRepository evProfileRepository;
     private final EvProfileMapper evProfileMapper;
+
+    private final IStorageService storageService;
 
     @Override
     public EvProfileResponse createEvProfile(EvProfileRequest evProfileRequest, String userId) {
@@ -45,7 +48,8 @@ public class EvProfileService implements IEvProfileService {
         evProfile.setUser(user);
 
         evProfile.setVerificationStatus(VerificationStatus.PENDING);
-        System.out.println(evProfile.getLicensePlate());
+        // Debug
+        // System.out.println(evProfile.getLicensePlate());
         return evProfileMapper.toEvProfileResponse(evProfileRepository.save(evProfile));
     }
 
