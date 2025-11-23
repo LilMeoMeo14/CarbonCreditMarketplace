@@ -14,6 +14,7 @@ public enum ErrorCode {
     // validation
     EMAIL_EXISTED(1001, "EMAIL EXISTED"),
     PHONENUMBER_EXISTED(1002, "Phone NUMBER EXISTED"),
+    NO_AVAILABLE_SAVINGS(1003, "No Carbong savings are eligible to submit a claim"),
 
     FILE_NULL(1007, "File cannot be null"),
     FILE_SIZE_TOO_LARGE(1008, "File size exceeds limit"),

@@ -127,7 +127,7 @@ public class EvProfileController {
     }
 
     // lay userId tu token
-    private String getAuthenticatedUserId() {
+    public String getAuthenticatedUserId() {
         // lay thong tin xac thuc tu spring security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

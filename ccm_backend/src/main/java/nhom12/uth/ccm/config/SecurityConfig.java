@@ -66,7 +66,7 @@ public class SecurityConfig {
                                 "/swagger-resources/**")
                         .permitAll()
 
-                        .requestMatchers("/ev-profiles/**").hasAuthority("ROLE_EV_OWNER")
+                        .requestMatchers("/ev-profiles/**", "/credit-requests/**").hasAuthority("ROLE_EV_OWNER")
                         .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
