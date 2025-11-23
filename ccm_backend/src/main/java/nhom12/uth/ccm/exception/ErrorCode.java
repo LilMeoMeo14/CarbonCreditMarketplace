@@ -33,7 +33,7 @@ public enum ErrorCode {
     PHONENUMBER_NOT_FOUND(3003, "Phone number not found"),
     EV_PROFILE_NOT_FOUND(3004, "Vehicle not found"),
     FILE_NOT_FOUND(3005, "File not found"),
-
+    CARBON_WALLET_NOT_FOUND(3006, "Carbon wallet not found for user"),
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
 
