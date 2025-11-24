@@ -2,6 +2,8 @@ package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import nhom12.uth.ccm.model.enums.PaymentStatus;
+import nhom12.uth.ccm.model.enums.TransactionType;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,16 +16,13 @@ import java.time.LocalDateTime;
  * Entity: PaymentTransaction
  * Bảng lưu thông tin các giao dịch thanh toán.
  * Mỗi PaymentTransaction có thể liên kết với:
- *  - Một EWallet (ví người dùng)
- *  - Một Transaction (giao dịch mua/bán tín chỉ)
+ * - Một EWallet (ví người dùng)
+ * - Một Transaction (giao dịch mua/bán tín chỉ)
  */
 @Entity
 @Table(name = "payment_transaction")
-@Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+
 public class PaymentTransaction {
 
     /**
@@ -34,8 +33,6 @@ public class PaymentTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id", updatable = false, nullable = false)
     private Integer paymentId;
-
-
 
     /**
      * Quan hệ N-1 với EWallet
@@ -94,22 +91,4 @@ public class PaymentTransaction {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // ================== ENUMS ==================
-
-    /**
-     * Loại giao dịch của PaymentTransaction
-     */
-
-    public enum TransactionType {
-        DEPOSIT,        // Nạp tiền
-        WITHDRAW,       // Rút tiền
-        PURCHASE,       // Mua tín chỉ carbon
-        SALE_REVENUE    // Doanh thu bán tín chỉ
-    }
-
-     public enum PaymentStatus {
-        PENDING, COMPLETED, FAILED
-    }
-
-  
 }
