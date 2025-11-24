@@ -10,9 +10,12 @@ import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IAuthenticationService;
+import nhom12.uth.ccm.service.IJwtService;
 import nhom12.uth.ccm.service.IUserService;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,38 +23,49 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService implements IAuthenticationService {
 
-    IUserRepository userRepository;
-    IUserService userService;
-    AuthenticationManager authenticationManager;
-    JwtService jwtService;   // ĐÃ SỬA: dùng JwtService thay vì IJwtService
+        IUserRepository userRepository;
+        IUserService userService;
+        AuthenticationManager authenticationManager;
+        IJwtService jwtService;
 
-    @Override
-    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()));
+        @Override
+        public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
+                authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(
+                                                authenticationRequest.getEmail(),
+                                                authenticationRequest.getPassword()));
 
-        var user = userRepository.findByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+                // neu khong loi tim user
+                var user = userRepository.findByEmail(authenticationRequest
+                                .getEmail())
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        String token = jwtService.generateToken(user.getEmail());
+                // tao jwt token
+                String token = jwtService.generateToken(user.getEmail());
 
-        return AuthenticationResponse.builder()
-                .token(token)
-                .success(true)
-                .build();
-    }
+                // tra ve token
 
-    @Override
-    public AuthenticationResponse register(CreateUserRequest createUserRequestDTO) {
-        userService.createUser(createUserRequestDTO);
+                return AuthenticationResponse.builder()
+                                .token(token)
+                                .success(true)
+                                .build();
 
-        String token = jwtService.generateToken(createUserRequestDTO.getEmail());
+        }
 
-        return AuthenticationResponse.builder()
-                .token(token)
-                .success(true)
-                .build();
-    }
+        @Override
+        public AuthenticationResponse register(CreateUserRequest createUserRequestDTO) {
+                // goi service luu user
+                userService.createUser(createUserRequestDTO);
+
+                // gen jwt token
+                String token = jwtService.generateToken(createUserRequestDTO.getEmail());
+
+                // tra ve token
+
+                return AuthenticationResponse.builder()
+                                .token(token)
+                                .success(true)
+                                .build();
+        }
+
 }
