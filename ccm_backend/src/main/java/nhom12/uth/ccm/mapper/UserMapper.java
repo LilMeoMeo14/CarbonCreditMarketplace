@@ -47,4 +47,5 @@ public interface UserMapper {
     @Mapping(source = "userRole", target = "role")
     @Mapping(source = "userId", target = "userId")
     UserResponse toUserResponeDTO(User user);
+
 }

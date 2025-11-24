@@ -1,20 +1,13 @@
 package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.response.CarbonWalletResponse;
+import nhom12.uth.ccm.model.User;
 
 public interface ICarbonWalletService {
 
-    /**
-     * Get carbon wallet info for current authenticated user
-     * @param userId User ID from JWT token
-     * @return CarbonWalletResponse
-     */
-    CarbonWalletResponse getCarbonWalletByUserId(String userId);
+    // tao vi moi khi register
+    void createWalletForUser(User user);
 
-    /**
-     * Create carbon wallet for user if not exists
-     * @param userId User ID
-     * @return CarbonWalletResponse
-     */
-    CarbonWalletResponse createCarbonWalletForUser(String userId);
+    // xem vi cua chinh minhf
+    CarbonWalletResponse getMyWallet(String userId);
 }

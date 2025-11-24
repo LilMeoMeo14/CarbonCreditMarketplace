@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import nhom12.uth.ccm.model.enums.RequestStatus;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp; 
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "carbon_credit_request")
@@ -19,61 +21,64 @@ import java.time.LocalDateTime;
 @Builder
 public class CarbonCreditRequest {
 
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id", updatable = false, nullable = false)
-    private Long requestId; 
+    private Long requestId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "VARCHAR(36)")
-    private User user; 
+    private User user;
 
-    // Mối quan hệ Many-to-One: Hồ sơ EV liên quan
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ev_profile_id", nullable = false)
-    private EVProfile evProfile; 
+    private EVProfile evProfile;
 
     @Column(name = "co2_amount_kg", precision = 10, scale = 2, nullable = false)
-    private BigDecimal co2AmountKg; 
-
-    @Column(name = "request_date", nullable = false)
-    private LocalDate requestDate = LocalDate.now(); 
+    private BigDecimal co2AmountKg;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    @Builder.Default// Ánh xạ giá trị DEFAULT từ ERD
-    private RequestStatus status = RequestStatus.PENDING; // ENUM, DEFAULT 'PENDING'
+    @Builder.Default
+    private RequestStatus status = RequestStatus.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "verifier_id", columnDefinition = "VARCHAR(36)") // Ánh xạ tới User ID (UUID)
-    private User verifier; 
+    @JoinColumn(name = "verifier_id", columnDefinition = "VARCHAR(36)")
+    private User verifier;
 
     @Column(name = "verification_note", columnDefinition = "TEXT")
-    private String verificationNote; 
+    private String verificationNote;
 
     @Column(name = "verified_date")
-    private LocalDate verifiedDate; 
+    private LocalDate verifiedDate;
 
-    // Mối quan hệ One-to-One: Tín chỉ carbon được phát hành (nếu APPROVED)
+    @Column(name = "credit_amount", precision = 10, scale = 2, nullable = false)
+    @Builder.Default
+    private BigDecimal creditAmount = BigDecimal.ZERO;
+
+    @OneToMany(mappedBy = "carbonCreditRequest", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<CarbonSaving> carbonSavings = new ArrayList<>();
+
     @OneToOne(mappedBy = "request", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private CarbonCredit carbonCredit; 
-    
+    private CarbonCredit carbonCredit;
+
+    @Column(name = "request_date", nullable = false)
+    private LocalDate requestDate;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime createdAt; 
+    private LocalDateTime createdAt;
 
-    @UpdateTimestamp // Thêm trường cập nhật theo ERD
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt; 
+    private LocalDateTime updatedAt;
 
-    public CarbonCreditRequest(User user, EVProfile evProfile, BigDecimal co2AmountKg) {
-        this.user = user;
-        this.evProfile = evProfile;
-        this.co2AmountKg = co2AmountKg;
+    @PrePersist
+    private void onCreate() {
         this.requestDate = LocalDate.now();
-        this.status = RequestStatus.PENDING;
     }
-    
+
     public void approve(User verifier, String note) {
         if (this.status != RequestStatus.PENDING) {
             throw new IllegalStateException("Request is not in PENDING status.");

@@ -50,6 +50,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     ApiRespone<AuthenticationResponse> register(@RequestBody CreateUserRequest createUserRequestDTO) {
+
         /*
          * Luong hoat dong
          * 1. Kiem tra email
@@ -65,7 +66,12 @@ public class AuthenticationController {
                 .result(authenticationResponse)
                 .code(1000)
                 .build();
+    }
 
+    public String postMethodName(@RequestBody String entity) {
+        // TODO: process POST request
+
+        return entity;
     }
 
     @PostMapping("/generateToken")
