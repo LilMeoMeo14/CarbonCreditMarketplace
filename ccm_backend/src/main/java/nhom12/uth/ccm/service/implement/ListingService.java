@@ -25,10 +25,10 @@ import nhom12.uth.ccm.service.IListingService;
 @RequiredArgsConstructor
 public class ListingService implements IListingService {
 
-    IUserRepository userRepository;
-    ICarbonWalletRepository carbonWalletRepository;
-    IListingRepository listingRepository;
-    ListingMapper listingMapper;
+    private final IUserRepository userRepository;
+    private final ICarbonWalletRepository carbonWalletRepository;
+    private final IListingRepository listingRepository;
+    private final ListingMapper listingMapper;
 
     @Override
     @Transactional
