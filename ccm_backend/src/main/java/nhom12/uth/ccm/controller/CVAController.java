@@ -2,23 +2,20 @@ package nhom12.uth.ccm.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import nhom12.uth.ccm.dto.request.ApiRespone;
-import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.ICVAService;
 
 @RestController
 @RequestMapping("/cva")
 @RequiredArgsConstructor
-public class CVAController {
+public class CVAController extends BaseController {
     private final ICVAService cvaService;
-    private final IUserRepository userRepository;
-    private final EvProfileController evProfileController;
+    private final EvProfileController evProfileController; // sua lai 1 lop base controller
 
     // duyet yeu cau
     @PostMapping("/requests/{requestId}/approve")
