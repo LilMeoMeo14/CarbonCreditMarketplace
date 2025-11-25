@@ -35,6 +35,8 @@ public enum ErrorCode {
     CARBON_WALLET_NOT_FOUND(3006, "Carbon wallet not found for user"),
     REQUEST_NOT_FOUND(3007, "Request not found"),
     LISTING_NOT_FOUND(3008, "Listing not found"),
+    INVALID_AMOUNT(1005, "Invalid amount"),
+    EWALLET_NOT_FOUND(3009, "E-wallet not found"),
 
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
