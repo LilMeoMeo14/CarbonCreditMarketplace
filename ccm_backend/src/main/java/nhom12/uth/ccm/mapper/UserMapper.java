@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-
+    
     @Mapping(target = "evProfiles", ignore = true)
     @Mapping(target = "creditRequests", ignore = true)
     @Mapping(target = "carbonWallet", ignore = true)
