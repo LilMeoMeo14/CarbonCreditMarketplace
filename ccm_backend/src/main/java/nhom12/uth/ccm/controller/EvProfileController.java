@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping("/ev-profiles")
 @RequiredArgsConstructor
-public class EvProfileController {
+public class EvProfileController extends BaseController{
     private final IEvProfileService evProfileService;
     private final IUserRepository userRepository;
     private final ICarbonSavingService carbonSavingService;
@@ -126,21 +126,4 @@ public class EvProfileController {
                 .build();
     }
 
-    // lay userId tu token
-    public String getAuthenticatedUserId() {
-        // lay thong tin xac thuc tu spring security
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // kiem tra xem co ai dang dang nhap khong
-
-        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-
-        String email = ((UserDetails) authentication.getPrincipal()).getUsername();
-
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        return user.getUserId();
-    }
 }
