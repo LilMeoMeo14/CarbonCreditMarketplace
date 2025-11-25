@@ -2,9 +2,12 @@ package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nhom12.uth.ccm.model.enums.CreditStatus;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "carbon_credit")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarbonCredit {
@@ -34,8 +38,10 @@ public class CarbonCredit {
     @Column(name = "expiry_date")
     private LocalDateTime expiryDate; // Ngày hết hạn (nếu có)
 
-    @Column(name = "status", nullable = false, length = 20)
-    private String status = "ACTIVE"; // ACTIVE | EXPIRED | TRANSFERRED, ...
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    private CreditStatus status = CreditStatus.ACTIVE;
 
     // Mối quan hệ One-to-One (CarbonCreditRequest là bên mappedBy)
     @OneToOne(fetch = FetchType.LAZY)
@@ -50,22 +56,4 @@ public class CarbonCredit {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    // Constructor tiện dụng
-    public CarbonCredit(BigDecimal amount, CarbonCreditRequest request, User user) {
-        this.amount = amount;
-        this.request = request;
-        this.user = user;
-        this.status = "ACTIVE";
-    }
-
-    // Hàm logic quản lý trạng thái
-    public void expire() {
-        this.status = "EXPIRED";
-    }
-
-    public void transferTo(User newOwner) {
-        this.user = newOwner;
-        this.status = "TRANSFERRED";
-    }
 }

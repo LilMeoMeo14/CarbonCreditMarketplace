@@ -34,8 +34,10 @@ public enum ErrorCode {
     EV_PROFILE_NOT_FOUND(3004, "Vehicle not found"),
     FILE_NOT_FOUND(3005, "File not found"),
     CARBON_WALLET_NOT_FOUND(3006, "Carbon wallet not found for user"),
+    REQUEST_NOT_FOUND(3007, "Request not found"),
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
+    INVALID_REQUEST_STATUS(4002, "Request is not in PENDING status"),
 
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");

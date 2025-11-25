@@ -68,6 +68,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/carbon-wallets/**")
                         .hasAuthority("ROLE_EV_OWNER")
+                        .requestMatchers("/cva/**").hasAuthority("ROLE_CVA")
                         .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
