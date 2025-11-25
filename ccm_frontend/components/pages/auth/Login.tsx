@@ -11,39 +11,54 @@ import { AlertCircle } from 'lucide-react';
 
 export function Login() {
   const { navigateTo } = useRouter();
+  // Lấy hàm login từ AppContext 
   const { login } = useAppContext();
+
   const [formData, setFormData] = React.useState({
     email: '',
     password: '',
   });
   const [error, setError] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
-    const result = login(formData.email, formData.password);
-    
-    if (result.success && result.user) {
-      // Navigate based on role
-      switch (result.user.role) {
-        case 'CVA':
-          navigateTo('/cva/dashboard');
-          break;
-        case 'ADMIN':
-          navigateTo('/admin/dashboard');
-          break;
-        case 'BUYER':
-          navigateTo('/buyer/dashboard');
-          break;
-        case 'EV_OWNER':
-          navigateTo('/ev-owner/dashboard');
-          break;
-        default:
-          navigateTo('/');
+    setIsLoading(true);
+
+    try {
+      // Gọi hàm login từ Context
+      // Hàm này sẽ tự động: Gọi API Backend -> Lưu Token -> Giải mã User -> Update State
+      const result = await login(formData.email, formData.password);
+
+      if (result.success && result.user) {
+        // Điều hướng dựa trên Role (Đã được AppContext xử lý sạch sẽ)
+        switch (result.user.role) {
+          case 'CVA':
+            navigateTo('/cva/dashboard');
+            break;
+          case 'ADMIN':
+            navigateTo('/admin/dashboard');
+            break;
+          case 'BUYER':
+            navigateTo('/buyer/dashboard');
+            break;
+          case 'EV_OWNER':
+            navigateTo('/ev-owner/dashboard');
+            break;
+          default:
+            navigateTo('/'); // Trang chủ mặc định
+        }
+      } else {
+        // Hiển thị lỗi từ Backend trả về (ví dụ: Sai mật khẩu)
+        setError(result.message || 'Đăng nhập thất bại');
       }
-    } else {
-      setError('Email hoặc mật khẩu không đúng');
+
+    } catch (err) {
+      console.error("Login UI Error:", err);
+      setError('Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,11 +70,6 @@ export function Login() {
           <CardDescription>
             Đăng nhập vào tài khoản của bạn để tiếp tục
           </CardDescription>
-          <div className="mt-4 p-3 bg-muted rounded-lg text-xs space-y-1">
-            <div className="font-medium mb-2">Tài khoản test:</div>
-            <div>✅ CVA: cvakiemduyet / cva123</div>
-            <div>⚙️ Admin: admin / admin123</div>
-          </div>
         </CardHeader>
         <CardContent>
           {error && (
@@ -70,11 +80,11 @@ export function Login() {
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="email">Email / Tên đăng nhập</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                type="text"
-                placeholder="Email hoặc cvakiemduyet / admin"
+                type="email"
+                placeholder="nhom12@example.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
@@ -99,8 +109,8 @@ export function Login() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              Đăng nhập
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
             </Button>
           </form>
 

@@ -10,6 +10,7 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.mapper.UserMapper;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.repository.IUserRepository;
+import nhom12.uth.ccm.service.ICarbonWalletService;
 import nhom12.uth.ccm.service.IUserService;
 import nhom12.uth.ccm.service.TokenBlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class UserService implements IUserService {
     @Autowired
     private TokenBlacklistService tokenBlacklistService;
 
+    @Autowired
+    private ICarbonWalletService carbonWalletService;
+
     // tao user moi
     @Override
     public UserResponse createUser(CreateUserRequest requestDTO) {
@@ -45,14 +49,15 @@ public class UserService implements IUserService {
         if (!(requestDTO.getPassword().equals(requestDTO.getReTypePassword()))) {
             throw new AppException(ErrorCode.PASSWORD_RETYPE);
         }
-
         // mapping user
         User user = userMapper.toUser(requestDTO);
         // hashing password
         String hashedPassword = passwordEncoder.encode(requestDTO.getPassword());
         user.setPasswordHash(hashedPassword);
+        User userSaved = userRepository.save(user);
+        carbonWalletService.createWalletForUser(userSaved);
         // luu vao database
-        return userMapper.toUserResponeDTO(userRepository.save(user));
+        return userMapper.toUserResponeDTO(userSaved);
     }
 
     @Override

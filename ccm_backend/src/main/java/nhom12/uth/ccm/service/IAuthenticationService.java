@@ -8,4 +8,5 @@ public interface IAuthenticationService {
     AuthenticationResponse login(AuthenticationRequest authenticationRequest);
 
     AuthenticationResponse register(CreateUserRequest createUserRequestDTO);
+
 }

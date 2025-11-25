@@ -17,5 +17,5 @@ public class AuthenticationRequest {
     String email;
     // String phoneNumber; update sau
     String password;
-    String reTypePassword;
+    // String reTypePassword;
 }
