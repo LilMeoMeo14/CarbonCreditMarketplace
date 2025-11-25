@@ -9,3 +9,4 @@ import nhom12.uth.ccm.model.CarbonWallet;
 public interface CarbonWalletMapper {
     CarbonWalletResponse toResponse(CarbonWallet carbonWallet);
 }
+

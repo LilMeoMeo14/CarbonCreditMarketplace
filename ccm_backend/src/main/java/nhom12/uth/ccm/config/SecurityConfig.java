@@ -65,9 +65,10 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**")
                         .permitAll()
-
-                        .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/carbon-wallets/**")
+                        .requestMatchers("/listings/active").authenticated()
+                        .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/carbon-wallets/**", "/listings/**")
                         .hasAuthority("ROLE_EV_OWNER")
+                        .requestMatchers("/cva/**").hasAuthority("ROLE_CVA")
                         .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 

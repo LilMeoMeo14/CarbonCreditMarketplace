@@ -11,6 +11,8 @@ import nhom12.uth.ccm.exception.ErrorCode;
 import nhom12.uth.ccm.model.EWallet;
 import nhom12.uth.ccm.model.PaymentTransaction;
 import nhom12.uth.ccm.model.User;
+import nhom12.uth.ccm.model.enums.PaymentStatus;
+import nhom12.uth.ccm.model.enums.TransactionType;
 import nhom12.uth.ccm.repository.IEWalletRepository;
 import nhom12.uth.ccm.repository.IPaymentTransactionRepository;
 import nhom12.uth.ccm.repository.IUserRepository;
@@ -29,10 +31,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EWalletService implements IEWalletService {
 
-    private final IEWalletRepository eWalletRepository;
-    private final IUserRepository userRepository;
-    private final IPaymentTransactionRepository paymentTransactionRepository;
-    private final IPaymentGatewayService paymentGatewayService;
+    IEWalletRepository eWalletRepository;
+    IUserRepository userRepository;
+    IPaymentTransactionRepository paymentTransactionRepository;
+    IPaymentGatewayService paymentGatewayService;
 
     @Override
     @Transactional(readOnly = true)
@@ -96,9 +98,9 @@ public class EWalletService implements IEWalletService {
         PaymentTransaction transaction = PaymentTransaction.builder()
                 .eWallet(wallet)
                 .amount(request.getAmount())
-                .transactionType(PaymentTransaction.TransactionType.DEPOSIT)
+                .transactionType(TransactionType.DEPOSIT)
                 .paymentMethod(request.getPaymentMethod() != null ? request.getPaymentMethod() : "BANK_TRANSFER")
-                .status(PaymentTransaction.PaymentStatus.PENDING)
+                .status(PaymentStatus.PENDING)
                 .referenceNumber(generateReferenceNumber())
                 .build();
 
@@ -147,9 +149,9 @@ public class EWalletService implements IEWalletService {
         PaymentTransaction transaction = PaymentTransaction.builder()
                 .eWallet(wallet)
                 .amount(request.getAmount())
-                .transactionType(PaymentTransaction.TransactionType.WITHDRAW)
+                .transactionType(TransactionType.WITHDRAW)
                 .paymentMethod("BANK_TRANSFER")
-                .status(PaymentTransaction.PaymentStatus.COMPLETED)
+                .status(PaymentStatus.COMPLETED)
                 .referenceNumber(generateReferenceNumber())
                 .build();
 

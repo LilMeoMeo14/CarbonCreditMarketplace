@@ -21,7 +21,11 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "payment_transaction")
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 
 public class PaymentTransaction {
 
@@ -84,6 +88,9 @@ public class PaymentTransaction {
     @Column(name = "reference_number", length = 100)
     private String referenceNumber;
 
+    @Column(name = "description", length = 255)
+    private String description;
+
     /**
      * Thời gian tạo bản ghi
      */
@@ -91,4 +98,7 @@ public class PaymentTransaction {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
