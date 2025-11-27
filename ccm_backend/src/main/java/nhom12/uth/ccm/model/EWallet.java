@@ -19,62 +19,57 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EWallet {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "wallet_id", updatable = false, nullable = false)
-private Long walletId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "wallet_id", updatable = false, nullable = false)
+    private Long walletId;
 
-@OneToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "user_id", nullable = false, unique = true, columnDefinition = "VARCHAR(36)")
-private User user;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true, columnDefinition = "VARCHAR(36)")
+    private User user;
 
     // so du kha dung
     @Column(name = "balance", precision = 19, scale = 2, nullable = false)
     @ColumnDefault("0.00")
-private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance = BigDecimal.ZERO;
 
-   // Số tiền ĐANG BỊ KHÓA (Đang đặt cọc trong các phiên đấu giá)
+    // Số tiền ĐANG BỊ KHÓA (Đang đặt cọc trong các phiên đấu giá)
     @Column(name = "locked_amount", precision = 19, scale = 2, nullable = false)
     @ColumnDefault("0.00")
     private BigDecimal lockedAmount = BigDecimal.ZERO;
 
-@Column(name = "currency", length = 10, nullable = false)
-@ColumnDefault("'VND'")
-private String currency = "VND";
-@@ -48,25 +50,58 @@
-@Column(name = "updated_at", nullable = false)
-private LocalDateTime updatedAt;
+    @Column(name = "currency", length = 10, nullable = false)
+    @ColumnDefault("'VND'")
+    private String currency = "VND";
 
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
-  
-
-
-
-/* Nạp tiền */
+    /* Nạp tiền */
     public void deposit(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Deposit amount must be positive.");
-this.balance = this.balance.add(amount);
-}
+        this.balance = this.balance.add(amount);
+    }
 
     /* Rút tiền/Mua hàng (Trừ thẳng vào số dư khả dụng) */
-public void withdraw(BigDecimal amount) {
-         validateAmount(amount);
+    public void withdraw(BigDecimal amount) {
+        validateAmount(amount);
         if (this.balance.compareTo(amount) < 0) {
             throw new IllegalArgumentException("Insufficient balance.");
-}
+        }
         this.balance = this.balance.subtract(amount);
     }
 
     /* Khóa tiền (Khi User Đặt cọc/Bid) */
     public void lockMoney(BigDecimal amount) {
         validateAmount(amount);
-if (this.balance.compareTo(amount) < 0) {
+        if (this.balance.compareTo(amount) < 0) {
             throw new IllegalArgumentException("Insufficient balance to lock (Not enough money to bid).");
-}
+        }
         // Trừ ở ví chính -> Chuyển sang ví khóa
-this.balance = this.balance.subtract(amount);
-         this.lockedAmount = this.lockedAmount.add(amount);
+        this.balance = this.balance.subtract(amount);
+        this.lockedAmount = this.lockedAmount.add(amount);
     }
 
     /* Mở khóa tiền (Hoàn tiền cọc khi có người khác trả giá cao hơn) */
@@ -103,5 +98,5 @@ this.balance = this.balance.subtract(amount);
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
         }
-}
+    }
 }
