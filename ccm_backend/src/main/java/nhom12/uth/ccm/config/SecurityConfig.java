@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.config;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,11 +69,13 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**")
                         .permitAll()
-                        .requestMatchers("/listings/active").authenticated()
+                        .requestMatchers("/e-wallets/transactions/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/listings/active", "/e-wallets/deposit-request", "/transactions/**")
+                        .authenticated()
+                        .requestMatchers("/listings/*/bid").hasAnyAuthority("ROLE_BUYER", "ROLE_EV_OWNER")
                         .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/carbon-wallets/**", "/listings/**")
                         .hasAuthority("ROLE_EV_OWNER")
                         .requestMatchers("/cva/**").hasAuthority("ROLE_CVA")
-                        .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
                 // Quan ly session (required for JWT)

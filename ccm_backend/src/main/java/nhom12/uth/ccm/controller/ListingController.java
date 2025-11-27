@@ -2,7 +2,6 @@ package nhom12.uth.ccm.controller;
 
 import java.util.List;
 
-import org.eclipse.angus.mail.imap.AppendUID;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 import nhom12.uth.ccm.dto.request.ApiRespone;
 import nhom12.uth.ccm.dto.request.ListingRequest;
 import nhom12.uth.ccm.dto.response.ListingResponse;
-import nhom12.uth.ccm.model.User;
-import nhom12.uth.ccm.repository.IListingRepository;
+
 import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IListingService;
 
