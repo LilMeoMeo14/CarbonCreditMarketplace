@@ -73,7 +73,7 @@ public class EWalletService implements IEWalletService {
                 .orElseGet(() -> createWalletForUser(user));
 
         List<PaymentTransaction> transactions = paymentTransactionRepository
-                .findByEWalletOrderByCreatedAtDesc(wallet);
+                .findByeWalletOrderByCreatedAtDesc(wallet);
 
         return transactions.stream()
                 .map(this::mapTransactionToResponse)
@@ -142,7 +142,7 @@ public class EWalletService implements IEWalletService {
         }
 
         // Update balance immediately
-        wallet.withdraw(request.getAmount());
+        wallet.setBalance(wallet.getBalance().subtract(request.getAmount()));
         eWalletRepository.save(wallet);
 
         // Create PaymentTransaction with COMPLETED status

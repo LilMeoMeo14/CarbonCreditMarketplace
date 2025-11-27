@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface IPaymentTransactionRepository extends JpaRepository<PaymentTransaction, Integer> {
+public interface IPaymentTransactionRepository extends JpaRepository<PaymentTransaction, Long> {
 
     List<PaymentTransaction> findByeWalletOrderByCreatedAtDesc(EWallet eWallet);
 
