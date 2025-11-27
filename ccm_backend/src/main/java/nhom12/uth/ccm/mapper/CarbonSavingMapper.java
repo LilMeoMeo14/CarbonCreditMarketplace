@@ -8,4 +8,5 @@ import nhom12.uth.ccm.model.CarbonSaving;
 @Mapper(componentModel = "spring")
 public interface CarbonSavingMapper {
     CarbonSavingResponse toResponse(CarbonSaving carbonSaving);
+
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import nhom12.uth.ccm.model.enums.PaymentMethod;
 import nhom12.uth.ccm.model.enums.PaymentStatus;
-import nhom12.uth.ccm.model.enums.TransactionType;
+import nhom12.uth.ccm.model.enums.PaymentType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,8 +44,8 @@ public class Transaction {
     private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "transaction_type", nullable = false)
-    private TransactionType transactionType;
+    @Column(name = "payment_type", nullable = false)
+    private PaymentType paymentType;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)

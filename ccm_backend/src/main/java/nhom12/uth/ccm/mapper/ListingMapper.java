@@ -36,4 +36,5 @@ public interface ListingMapper {
 
         return (first + " " + last).trim();
     }
+
 }
