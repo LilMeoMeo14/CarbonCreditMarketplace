@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-
+    
     @Mapping(target = "evProfiles", ignore = true)
     @Mapping(target = "creditRequests", ignore = true)
     @Mapping(target = "carbonWallet", ignore = true)
@@ -47,4 +47,5 @@ public interface UserMapper {
     @Mapping(source = "userRole", target = "role")
     @Mapping(source = "userId", target = "userId")
     UserResponse toUserResponeDTO(User user);
+
 }

@@ -1,6 +1,6 @@
 package nhom12.uth.ccm.config;
 
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import nhom12.uth.ccm.filters.JwtAuthFilter;
 
@@ -49,14 +52,28 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // tat CSRF (khong can thiet cho JWT)
+
                 .csrf(csrf -> csrf.disable())
+
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // Phan quyen truy cap (Authentication)
                 .authorizeHttpRequests(auth -> auth
-                        //
-
-                        .anyRequest().permitAll())
+                        .requestMatchers(
+                                "/",
+                                "/users/**",
+                                "/auth/**",
+                                "/files/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**")
+                        .permitAll()
+                        .requestMatchers("/listings/active").authenticated()
+                        .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/carbon-wallets/**", "/listings/**")
+                        .hasAuthority("ROLE_EV_OWNER")
+                        .requestMatchers("/cva/**").hasAuthority("ROLE_CVA")
+                        .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated())
 
                 // Quan ly session (required for JWT)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -68,6 +85,24 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Cho phép Frontend gọi vào.
+        // Nếu Frontend chạy port 3000, dùng "http://localhost:3000"
+        // Nếu Frontend chạy port 5173 (Vite), dùng "http://localhost:5173"
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
+
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     /*

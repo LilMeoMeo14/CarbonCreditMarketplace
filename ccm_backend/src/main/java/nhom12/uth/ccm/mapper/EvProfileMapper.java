@@ -28,4 +28,5 @@ public interface EvProfileMapper {
     @Mapping(target = "carbonSavings", ignore = true)
     @Mapping(target = "creditRequests", ignore = true)
     void updateEvProfile(@MappingTarget EVProfile evProfile, EvProfileRequest evProfileRequest);
+
 }
