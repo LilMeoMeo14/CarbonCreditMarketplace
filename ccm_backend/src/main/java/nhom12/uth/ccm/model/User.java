@@ -38,10 +38,10 @@ public class User implements UserDetails {
     @Column(name = "password_hash", length = 255, nullable = false)
     private String passwordHash;
 
-    @Column(name ="first_name" , length = 30)
+    @Column(name = "first_name", length = 30) 
     private String firstName;
 
-    @Column(name ="last_name" , length = 30)
+    @Column(name = "last_name", length = 30)
     private String lastName;
 
     @Column(name = "phone_number", length = 11, unique = true)
@@ -99,14 +99,15 @@ public class User implements UserDetails {
     private List<Transaction> purchasedTransactions = new ArrayList<>();
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<Transaction> saleTransactions = new ArrayList<>();
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Certificate> certificates = new ArrayList<>();
 
     // full parameter
-    public User(String userId, String email, String passwordHash, String firstName, String lastName, String phoneNumber, UserRole userRole, UserStatus status) {
+    public User(String userId, String email, String passwordHash, String firstName, String lastName, String phoneNumber,
+            UserRole userRole, UserStatus status) {
         this.userId = userId;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -116,24 +117,6 @@ public class User implements UserDetails {
         this.userRole = userRole;
         this.status = status;
     }
-
-    // set datatime
-    @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (updatedAt == null) {
-            updatedAt = LocalDateTime.now();
-        }
-
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

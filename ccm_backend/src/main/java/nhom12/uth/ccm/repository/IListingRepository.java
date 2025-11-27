@@ -1,5 +1,6 @@
 package nhom12.uth.ccm.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,12 @@ public interface IListingRepository extends JpaRepository<Listing, Long> {
      * Ví dụ: Chỉ xem các phiên Đấu giá đang diễn ra.
      */
     List<Listing> findByListingTypeAndStatus(ListingType type, ListingStatus status);
+
+    /**
+     * Tìm các phiên đấu giá đang ACTIVE nhưng đã hết hạn (expiresAt < now).
+     */
+    List<Listing> findAllByStatusAndListingTypeAndExpiresAtBefore(
+            ListingStatus status,
+            ListingType listingType,
+            LocalDateTime now);
 }
