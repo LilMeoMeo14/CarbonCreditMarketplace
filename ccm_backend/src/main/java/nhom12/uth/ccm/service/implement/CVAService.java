@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import nhom12.uth.ccm.dto.response.CarbonCreditResponse;
 import nhom12.uth.ccm.exception.AppException;
 import nhom12.uth.ccm.exception.ErrorCode;
+import nhom12.uth.ccm.mapper.CarbonCreditMapper;
+import nhom12.uth.ccm.mapper.CarbonCreditRequestMapper;
 import nhom12.uth.ccm.model.CarbonCredit;
 import nhom12.uth.ccm.model.CarbonCreditRequest;
 import nhom12.uth.ccm.model.CarbonWallet;
@@ -29,9 +32,12 @@ public class CVAService implements ICVAService {
     private final ICarbonWalletRepository carbonWalletRepository;
     private final IUserRepository userRepository;
 
+    private final CarbonCreditMapper carbonCreditMapper;
+    private final CarbonCreditRequestMapper carbonCreditRequestMapper;
+   
     @Override
     @Transactional
-    public void approveRequest(Long requestId, String verifierId, String note) {
+    public CarbonCreditResponse approveRequest(Long requestId, String verifierId, String note) {
         /*
          * Luồng hoạt động
          * 1. Lấy thông tin cva
@@ -73,7 +79,9 @@ public class CVAService implements ICVAService {
         wallet.deposit(newCarbonCredit.getAmount());
 
         carbonWalletRepository.save(wallet);
-    }
+        
+        
+        return carbonCreditMapper.toResponse(newCarbonCredit); }
 
     @Override
     @Transactional
@@ -101,6 +109,8 @@ public class CVAService implements ICVAService {
         carbonCreditRequest.setVerifiedDate(LocalDate.now());
 
         carbonCreditRequestRepository.save(carbonCreditRequest);
+     
+        carbonCreditRequestMapper.toResponse(carbonCreditRequest);
     }
 
 }

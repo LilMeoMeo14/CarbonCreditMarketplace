@@ -1,4 +1,4 @@
-package nhom12.uth.ccm.dto.response;
+package nhom12.uth.ccm.dto.request;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

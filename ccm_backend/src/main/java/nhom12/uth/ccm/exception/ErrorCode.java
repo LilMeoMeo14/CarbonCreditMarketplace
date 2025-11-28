@@ -1,5 +1,7 @@
 package nhom12.uth.ccm.exception;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 
 @Getter
@@ -13,7 +15,6 @@ public enum ErrorCode {
     EMAIL_EXISTED(1001, "EMAIL EXISTED"),
     PHONENUMBER_EXISTED(1002, "Phone NUMBER EXISTED"),
     NO_AVAILABLE_SAVINGS(1003, "No Carbong savings are eligible to submit a claim"),
-    INSUFFICIENT_BALANCE(1004, "Insufficient available balance to list for sale."),
 
     FILE_NULL(1007, "File cannot be null"),
     FILE_SIZE_TOO_LARGE(1008, "File size exceeds limit"),
@@ -41,8 +42,6 @@ public enum ErrorCode {
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
     INVALID_REQUEST_STATUS(4002, "Request is not in PENDING status"),
-    NOT_LISTING_OWNER(4003, "You are not the owner of listing"),
-    LISTING_NOT_ACTIVE(4004, "Cannot cancel listing that is not ACTIVE"),
 
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");

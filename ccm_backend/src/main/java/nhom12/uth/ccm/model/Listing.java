@@ -25,11 +25,11 @@ public class Listing {
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
     
-    @Column(name = "amount", nullable = false, precision = 10, scale = 2)
-    private BigDecimal amount;
+    @Column(name = "quantity_kg", nullable = false, precision = 10, scale = 2)
+    private BigDecimal quantityKg;
     
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(name = "price_per_kg", nullable = false, precision = 10, scale = 2)
+    private BigDecimal pricePerKg;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "listing_type", nullable = false)

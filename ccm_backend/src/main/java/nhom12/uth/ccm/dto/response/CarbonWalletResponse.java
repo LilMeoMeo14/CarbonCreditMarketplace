@@ -18,6 +18,5 @@ import lombok.experimental.FieldDefaults;
 public class CarbonWalletResponse {
     Long walletId;
     BigDecimal balance;
-    BigDecimal lockedAmount;
     LocalDateTime updatedAt;
 }

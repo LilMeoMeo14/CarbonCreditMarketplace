@@ -19,33 +19,33 @@ import nhom12.uth.ccm.service.ICarbonCreditRequestService;
 @RestController
 @RequestMapping("/credit-requests")
 @RequiredArgsConstructor
-public class CarbonCreditRequestController extends BaseController {
+public class CarbonCreditRequestController {
 
-        private final ICarbonCreditRequestService carbonCreditRequestService;
-        private final EvProfileController evProfileController;
+    private final ICarbonCreditRequestService carbonCreditRequestService;
+    private final IUserRepository userRepository;
+    private final EvProfileController evProfileController;
 
-        @PostMapping
-        public ApiRespone<CreditRequestResponse> createCreditRequest(
-                        @RequestBody @Valid CreditRequestRequest creditRequestRequest) {
-                String userId = evProfileController.getAuthenticatedUserId();
+    @PostMapping
+    public ApiRespone<CreditRequestResponse> createCreditRequest(
+            @RequestBody @Valid CreditRequestRequest creditRequestRequest) {
+        String userId = evProfileController.getAuthenticatedUserId();
 
-                CreditRequestResponse creditRequestResponse = carbonCreditRequestService
-                                .createCreditRequest(creditRequestRequest, userId);
+        CreditRequestResponse creditRequestResponse = carbonCreditRequestService
+                .createCreditRequest(creditRequestRequest, userId);
 
-                return ApiRespone.<CreditRequestResponse>builder()
-                                .result(creditRequestResponse)
-                                .build();
+        return ApiRespone.<CreditRequestResponse>builder()
+                .result(creditRequestResponse)
+                .build();
 
-        }
+    }
 
-        @GetMapping("/my-requests")
-        public ApiRespone<List<CreditRequestResponse>> getMyCreditRequest() {
-                String userId = evProfileController.getAuthenticatedUserId();
-                List<CreditRequestResponse> creditRequestResponses = carbonCreditRequestService
-                                .getMyCreditRequests(userId);
+    @GetMapping("/my-requests")
+    public ApiRespone<List<CreditRequestResponse>> getMyCreditRequest() {
+        String userId = evProfileController.getAuthenticatedUserId();
+        List<CreditRequestResponse> creditRequestResponses = carbonCreditRequestService.getMyCreditRequests(userId);
 
-                return ApiRespone.<List<CreditRequestResponse>>builder()
-                                .result(creditRequestResponses)
-                                .build();
-        }
+        return ApiRespone.<List<CreditRequestResponse>>builder()
+                .result(creditRequestResponses)
+                .build();
+    }
 }
