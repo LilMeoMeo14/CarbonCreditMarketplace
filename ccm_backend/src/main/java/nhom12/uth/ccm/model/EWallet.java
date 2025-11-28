@@ -42,6 +42,11 @@ public class EWallet {
     @ColumnDefault("'VND'")
     private String currency = "VND";
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 

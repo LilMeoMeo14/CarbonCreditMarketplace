@@ -2,13 +2,12 @@ package nhom12.uth.ccm.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import nhom12.uth.ccm.model.enums.BidStatus;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -20,6 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Bid {
 
     @Id
@@ -28,38 +28,28 @@ public class Bid {
     private Long bidId;
 
     /**
-     * Nhiều lượt đặt giá thuộc về một Auction
+     * Quan hệ Many-to-One với Listing.
+     * Thay vì trỏ vào Auction, ta trỏ thẳng vào Listing.
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id", nullable = false)
-    private Auction auction;
+    @JoinColumn(name = "listing_id", nullable = false)
+    private Listing listing; // <-- SỬA: Dùng Listing
 
-    /**
-     * Người đặt giá (bidder)
-     */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id", nullable = false)
-    private User buyer;
+    @JoinColumn(name = "bidder_id", nullable = false)
+    private User bidder; // (Đổi tên buyer_id -> bidder_id cho chuẩn thuật ngữ đấu giá)
 
-    @Column(name = "bid_price_per_kg", precision = 10, scale = 2, nullable = false)
-    private BigDecimal bidPricePerKg;
+    @Column(name = "amount", precision = 19, scale = 2, nullable = false)
+    private BigDecimal amount; // Giá đặt
 
     @CreationTimestamp
     @Column(name = "bid_time", updatable = false, nullable = false)
     private LocalDateTime bidTime;
 
+    // (Tùy chọn) Trạng thái bid: ACTIVE, CANCELLED, WON...
+    // Nếu bạn muốn quản lý lịch sử chi tiết
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 20)
-    @ColumnDefault("'ACTIVE'")
-    private BidStatus status;
-
-    // -----------------------------------------------------------------
-    // Constructor tùy chỉnh (không bao gồm ID và bidTime)
-    // -----------------------------------------------------------------
-    public Bid(Auction auction, User buyer, BigDecimal bidPricePerKg, BidStatus status) {
-        this.auction = auction;
-        this.buyer = buyer;
-        this.bidPricePerKg = bidPricePerKg;
-        this.status = status;
-    }
+    @Column(name = "status", length = 20)
+    @Builder.Default
+    private BidStatus status = BidStatus.ACTIVE;
 }

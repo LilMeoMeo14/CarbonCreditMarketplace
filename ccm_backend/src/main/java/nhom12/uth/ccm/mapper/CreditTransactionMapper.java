@@ -4,17 +4,18 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import nhom12.uth.ccm.dto.response.BidResponse;
-import nhom12.uth.ccm.model.Bid;
+import nhom12.uth.ccm.dto.response.CreditTransactionResponse;
+import nhom12.uth.ccm.model.CreditTransaction;
 import nhom12.uth.ccm.model.User;
 
 @Mapper(componentModel = "spring")
-public interface BidMapper {
-
+public interface CreditTransactionMapper {
     @Mapping(source = "listing.listingId", target = "listingId")
-    @Mapping(source = "bidder.userId", target = "bidderId")
-    @Mapping(source = "bidder", target = "bidderName", qualifiedByName = "getFullName")
-    BidResponse toResponse(Bid bid);
+    @Mapping(source = "seller.userId", target = "sellerId")
+    @Mapping(source = "seller", target = "sellerName", qualifiedByName = "getFullName")
+    @Mapping(source = "buyer.userId", target = "buyerId")
+    @Mapping(source = "buyer", target = "buyerName", qualifiedByName = "getFullName")
+    CreditTransactionResponse toResponse(CreditTransaction transaction);
 
     @Named("getFullName")
     default String getFullName(User user) {
