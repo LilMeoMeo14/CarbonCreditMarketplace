@@ -9,13 +9,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Entity: Certificate
  * Bảng quản lý TẬP TRUNG tất cả chứng chỉ carbon.
  * Mỗi chứng chỉ có thể được phát hành khi:
- *  - User tạo tín chỉ carbon (ISSUED)
- *  - User mua tín chỉ carbon (PURCHASED)
+ * - User tạo tín chỉ carbon (ISSUED)
+ * - User mua tín chỉ carbon (PURCHASED)
  */
 @Entity
 @Table(name = "certificate")
@@ -26,70 +27,42 @@ import java.time.LocalDateTime;
 @Builder
 public class Certificate {
 
-    /**
-     * Khóa chính (Primary Key(PK)
-     * Tự tăng (AUTO_INCREMENT)
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "certificate_id", updatable = false, nullable = false)
-    private Integer certificate_id;
-
-    /**
-     * Quan hệ N-1 với User
-     * Một User có thể sở hữu nhiều Certificate. Nhưng mỗi Certificate chỉ thuộc về một User.
-     * - user_id: FK → USER.user_id
-     */
+    private Long certificateId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    /**
-     * Loại chứng chỉ:
-     * - CARBON_CREDIT_ISSUED: Phát hành tín chỉ carbon (khi tạo mới)
-     * - CARBON_CREDIT_PURCHASED: Mua tín chỉ carbon (qua giao dịch)
-     */
     @Enumerated(EnumType.STRING)
     @Column(name = "certificate_type", nullable = false, length = 50)
-    private CertificateType certificate_type;
+    private CertificateType type;
 
-    /**
-     * ID liên quan: có thể là credit_id hoặc transaction_id
-     * Giúp truy xuất ngược lại nguồn gốc chứng chỉ.
-     */
-    @Column(name = "related_id", nullable = false)
-    private Integer related_id;
+    @Column(name = "related_id")
+    private Long relatedId;
 
-    /**
-     * Lượng CO₂ tương ứng của chứng chỉ (đơn vị: kg)
-     */
-    @Column(name = "co2_amount_kg", nullable = false, precision = 10, scale = 2)
-    private BigDecimal co2_amount_kg;
+    @Column(name = "amount", nullable = false, precision = 19, scale = 4)
+    private BigDecimal amount;
 
-    /**
-     * Ngày phát hành chứng chỉ
-     */
     @Column(name = "issue_date", nullable = false)
-    private LocalDate issue_date;
+    private LocalDate issueDate;
 
-    /**
-     * Số hiệu chứng chỉ (mã duy nhất)
-     * Ví dụ: CERT-2025-0001
-     */
-    @Column(name = "certificate_number", unique = true, length = 100)
-    private String certificate_number;
+    @Column(name = "serial_number", unique = true, length = 100)
+    private String serialNumber;
 
-    /**
-     * Đường dẫn (URL) đến file PDF chứng chỉ
-     * Có thể trỏ đến AWS S3, Firebase Storage hoặc local server
-     */
+    @Column(name = "reason")
+    private String reason;
+
     @Column(name = "pdf_url", length = 255)
-    private String pdf_url;
+    private String pdfUrl;
 
-    /**
-     * Thời gian tạo bản ghi (tự động thêm khi insert)
-     */
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
+
+    // Helper sinh mã Serial
+    public static String generateSerialNumber() {
+        return "CERT-" + System.currentTimeMillis() + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
 }

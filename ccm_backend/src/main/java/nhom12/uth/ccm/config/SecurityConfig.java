@@ -65,11 +65,15 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**")
                         .permitAll()
-
-                        .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/carbon-wallets/**")
+                        .requestMatchers("/carbon-wallets/**", "/certificate/**")
+                        .hasAnyAuthority("ROLE_BUYER", "ROLE_EV_OWNER")
+                        .requestMatchers("/e-wallets/transactions/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/listings/active", "/e-wallets/deposit-request", "/transactions/**")
+                        .authenticated()
+                        .requestMatchers("/listings/*/bid").hasAuthority("ROLE_BUYER")
+                        .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/listings/**")
                         .hasAuthority("ROLE_EV_OWNER")
                         .requestMatchers("/cva/**").hasAuthority("ROLE_CVA")
-                        .requestMatchers("/auth/admin/**", "/e-wallets/transactions/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
                 // Quan ly session (required for JWT)
@@ -85,7 +89,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Cho phép Frontend gọi vào.
@@ -108,7 +112,7 @@ public class SecurityConfig {
      */
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());

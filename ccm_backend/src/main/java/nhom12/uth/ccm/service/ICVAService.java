@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.response.CarbonCreditResponse;
+import nhom12.uth.ccm.dto.response.CreditRequestResponse;
 import nhom12.uth.ccm.model.CarbonCreditRequest;
 
 public interface ICVAService {
@@ -16,11 +17,11 @@ public interface ICVAService {
      * @param verifierId ID của CVA (người duyệt)
      * @param note       Ghi chú (nếu có)
      */
-   CarbonCreditResponse approveRequest(Long requestId, String verifierId, String note);
+    CarbonCreditResponse approveRequest(Long requestId, String verifierId, String note);
 
     /**
      * Từ chối yêu cầu.
      * Hành động này chỉ chuyển trạng thái Request -> REJECTED
      */
-    void rejectRequest(Long requestId, String verifierId, String reason);
+    CreditRequestResponse rejectRequest(Long requestId, String verifierId, String reason);
 }

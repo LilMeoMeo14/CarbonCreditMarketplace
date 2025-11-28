@@ -15,10 +15,13 @@ public enum ErrorCode {
     EMAIL_EXISTED(1001, "EMAIL EXISTED"),
     PHONENUMBER_EXISTED(1002, "Phone NUMBER EXISTED"),
     NO_AVAILABLE_SAVINGS(1003, "No Carbong savings are eligible to submit a claim"),
+    INSUFFICIENT_BALANCE(1004, "Insufficient available balance to list for sale."),
 
     FILE_NULL(1007, "File cannot be null"),
     FILE_SIZE_TOO_LARGE(1008, "File size exceeds limit"),
     FILE_UPLOAD_FAILED(1009, "Failed to upload file"),
+    AMOUNT_REQUIRED(1010, "Amount cannot be null"),
+    AMOUNT_MUST_BE_POSITIVE(1011, "Amount must be positive"),
 
     // validation cho du lieu dau vai
     EMAIL_INVALID(2001, "Invalid email"),
@@ -36,12 +39,19 @@ public enum ErrorCode {
     CARBON_WALLET_NOT_FOUND(3006, "Carbon wallet not found for user"),
     REQUEST_NOT_FOUND(3007, "Request not found"),
     LISTING_NOT_FOUND(3008, "Listing not found"),
-    INVALID_AMOUNT(1005, "Invalid amount"),
-    EWALLET_NOT_FOUND(3009, "E-wallet not found"),
+    WALLET_NOT_FOUND(3009, "EWallet not found"),
+    TRANSACTION_NOT_FOUND(3010, "Transaction not found"),
 
     // validation error
     UNAUTHENTICATED(4001, "Unauthorized"),
     INVALID_REQUEST_STATUS(4002, "Request is not in PENDING status"),
+    NOT_LISTING_OWNER(4003, "You are not the owner of listing"),
+    LISTING_NOT_ACTIVE(4004, "Cannot cancel listing that is not ACTIVE"),
+    NOT_AUCTION(4005, "This listing is not AUCTION"),
+    AUCTION_EXPIRED(4006, "Auction has expired"),
+    NOT_BID_OWNER_LISTING(4007, "Cannot bid on your owner listing"),
+    BID_BELOW_START_PRICE(4008, "Bid amount must be greater than or equal to start price"),
+    BID_NOT_HIGHER_THAN_CURRENT(4009, "Bid amount must be higher than current highest bid"),
 
     // loi khong xac dinh
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định");

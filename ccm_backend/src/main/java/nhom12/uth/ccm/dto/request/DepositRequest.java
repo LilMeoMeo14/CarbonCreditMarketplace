@@ -1,21 +1,22 @@
 package nhom12.uth.ccm.dto.request;
 
-import jakarta.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class DepositRequest {
+    private String userId;
+    @NotNull(message = "AMOUNT_REQUIRED")
+    @Positive(message = "AMOUNT_MUST_BE_POSITIVE")
+    private BigDecimal amount; // Số tiền muốn cộng
 
-    @NotNull(message = "Amount is required")
-    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
-    private BigDecimal amount;
-
-    private String paymentMethod; // e.g., "BANK_TRANSFER", "CREDIT_CARD", "MOMO", "VNPAY"
 }

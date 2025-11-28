@@ -21,12 +21,11 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "payment_transaction")
-@Getter
-@Setter
-@Builder
+@Getter // Thêm
+@Setter // Thêm
 @NoArgsConstructor
-@AllArgsConstructor
-
+@AllArgsConstructor // Thêm
+@Builder // Thêm Builder để code Service cho gọn
 public class PaymentTransaction {
 
     /**
@@ -51,21 +50,21 @@ public class PaymentTransaction {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
+    private CreditTransaction transaction; // Bạn cần đảm bảo model 'Transaction' đã tồn tại hoặc tạo sau
 
     /**
-     * Số tiền thanh toán 
+     * Số tiền thanh toán
      */
-       @Column(name = "amount", nullable = false, precision = 19, scale = 2) // SỬA: precision 12 -> 19 cho an toàn
+    @Column(name = "amount", nullable = false, precision = 19, scale = 2) // SỬA: precision 12 -> 19 cho an toàn
     private BigDecimal amount;
+
     /**
      * Loại giao dịch (Nạp, Rút, Mua, Bán...)
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false, length = 30)
-    
     private PaymentType type; // SỬA: TransactionType -> PaymentType
-   
+
     /**
      * Phương thức thanh toán (VNPay, Bank Transfer...)
      */
@@ -86,7 +85,10 @@ public class PaymentTransaction {
     @Column(name = "reference_number", length = 100)
     private String referenceNumber;
 
-    @Column(name = "description", length = 255)
+    /**
+     * Mô tả giao dịch
+     */
+    @Column(name = "description")
     private String description;
 
     /**
@@ -96,7 +98,4 @@ public class PaymentTransaction {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }
