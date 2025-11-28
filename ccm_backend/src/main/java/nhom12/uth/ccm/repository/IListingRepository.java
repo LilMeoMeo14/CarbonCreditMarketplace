@@ -39,4 +39,5 @@ public interface IListingRepository extends JpaRepository<Listing, Long> {
             ListingStatus status,
             ListingType listingType,
             LocalDateTime now);
+
 }

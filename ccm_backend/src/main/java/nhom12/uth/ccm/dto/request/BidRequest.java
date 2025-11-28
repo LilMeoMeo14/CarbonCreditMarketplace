@@ -1,8 +1,9 @@
-package nhom12.uth.ccm.dto.response;
+package nhom12.uth.ccm.dto.request;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +16,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CarbonWalletResponse {
-    Long walletId;
-    BigDecimal balance;
-    BigDecimal lockedAmount;
-    LocalDateTime updatedAt;
+public class BidRequest {
+    @NotNull
+    @Positive
+    BigDecimal amount;
 }

@@ -38,7 +38,7 @@ public class User implements UserDetails {
     @Column(name = "password_hash", length = 255, nullable = false)
     private String passwordHash;
 
-    @Column(name = "first_name", length = 30) 
+    @Column(name = "first_name", length = 30)
     private String firstName;
 
     @Column(name = "last_name", length = 30)
@@ -96,9 +96,9 @@ public class User implements UserDetails {
      * KHÔNG DÙNG CASCADE: Khi xóa User, ta không muốn xóa lịch sử giao dịch.
      */
     @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
-    private List<Transaction> purchasedTransactions = new ArrayList<>();
+    private List<CreditTransaction> purchasedTransactions = new ArrayList<>();
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
-    private List<Transaction> saleTransactions = new ArrayList<>();
+    private List<CreditTransaction> saleTransactions = new ArrayList<>();
     @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
 

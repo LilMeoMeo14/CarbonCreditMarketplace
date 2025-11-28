@@ -7,5 +7,4 @@ import nhom12.uth.ccm.model.PaymentTransaction;
 
 @Repository
 public interface IPaymentTransactionRepository extends JpaRepository<PaymentTransaction, Long> {
-
 }
