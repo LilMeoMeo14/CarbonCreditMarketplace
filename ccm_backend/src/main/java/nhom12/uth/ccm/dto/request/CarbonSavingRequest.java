@@ -3,6 +3,7 @@ package nhom12.uth.ccm.dto.request;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,6 @@ public class CarbonSavingRequest {
 
     @NotNull(message = "DATE_REQUIRED")
     private LocalDate recordedDate; // Ngày ghi nhận
+    @NotBlank(message = "EVIDENCE_IMAGE_REQUIRED")
+    private String evidenceImageUrl;
 }

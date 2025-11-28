@@ -38,6 +38,9 @@ public class CarbonSaving {
 
     @Column(name = "co2_saved_kg", precision = 10, scale = 2, nullable = false)
     private BigDecimal co2SavedKg;
+    // anh minh chung
+    @Column(name = "evidence_image_url")
+    private String evidenceImageUrl;
 
     @Column(name = "calculation_method", length = 50)
     private String calculationMethod;
@@ -67,13 +70,15 @@ public class CarbonSaving {
      * ID và createdAt sẽ được database tự động tạo.
      */
     public CarbonSaving(EVProfile evProfile, BigDecimal distanceKm, BigDecimal co2SavedKg, String calculationMethod,
-            LocalDate recordedDate, VerificationStatus status) {
+            LocalDate recordedDate, VerificationStatus status, String evidenceImageUrl) {
         this.evProfile = evProfile;
         this.distanceKm = distanceKm;
         this.co2SavedKg = co2SavedKg;
         this.calculationMethod = calculationMethod;
         this.recordedDate = recordedDate;
         this.status = status;
+        this.evidenceImageUrl = evidenceImageUrl;
+
     }
 
     public CarbonSaving(EVProfile evProfile, BigDecimal distanceKm, BigDecimal co2SavedKg, String calculationMethod,
