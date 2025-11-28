@@ -68,7 +68,8 @@ public class SecurityConfig {
                         .requestMatchers("/carbon-wallets/**", "/certificate/**")
                         .hasAnyAuthority("ROLE_BUYER", "ROLE_EV_OWNER")
                         .requestMatchers("/e-wallets/transactions/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/listings/active", "/e-wallets/deposit-request", "/transactions/**")
+                        .requestMatchers("/listings/active", "/e-wallets/deposit-request", "/transactions/**",
+                                "files/**")
                         .authenticated()
                         .requestMatchers("/listings/*/bid").hasAuthority("ROLE_BUYER")
                         .requestMatchers("/ev-profiles/**", "/credit-requests/**", "/listings/**")

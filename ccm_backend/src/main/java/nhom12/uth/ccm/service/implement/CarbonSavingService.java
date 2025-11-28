@@ -18,6 +18,7 @@ import nhom12.uth.ccm.model.enums.VerificationStatus;
 import nhom12.uth.ccm.repository.ICarbonSavingRepository;
 import nhom12.uth.ccm.repository.IEvProfileRepository;
 import nhom12.uth.ccm.service.ICarbonSavingService;
+import nhom12.uth.ccm.service.IStorageService;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class CarbonSavingService implements ICarbonSavingService {
         private final IEvProfileRepository evProfileRepository;
         private final ICarbonSavingRepository carbonSavingRepository;
         private final CarbonSavingMapper carbonSavingMapper;
+        private final IStorageService storageService;
 
         @Override
         public CarbonSavingResponse createCarbonSaving(Long evProfileId, CarbonSavingRequest carbonSavingRequest,
@@ -51,6 +53,15 @@ public class CarbonSavingService implements ICarbonSavingService {
                         throw new AppException(ErrorCode.EV_PROFILE_NOT_VERIFIED);
                 }
 
+                // load anh de kiem tra file anh co duoc luu chua
+
+                try {
+                        storageService.loadAsResource(carbonSavingRequest.getEvidenceImageUrl());
+                } catch (Exception e) {
+                        // Bạn có thể tạo ErrorCode.EVIDENCE_FILE_NOT_FOUND cho rõ nghĩa
+                        throw new AppException(ErrorCode.FILE_NOT_FOUND);
+                }
+
                 BigDecimal co2Saved = carbonSavingRequest.getDistanceKm().multiply(EMISSION_FACTOR_KG_PER_KM);
 
                 CarbonSaving carbonSaving = new CarbonSaving(
@@ -59,7 +70,8 @@ public class CarbonSavingService implements ICarbonSavingService {
                                 co2Saved,
                                 CALCULATION_METHOD,
                                 carbonSavingRequest.getRecordedDate(),
-                                VerificationStatus.PENDING);
+                                VerificationStatus.PENDING,
+                                carbonSavingRequest.getEvidenceImageUrl());
 
                 return carbonSavingMapper.toResponse(carbonSavingRepository.save(carbonSaving));
         }
