@@ -23,6 +23,11 @@ public enum ErrorCode {
     AMOUNT_REQUIRED(1010, "Amount cannot be null"),
     AMOUNT_MUST_BE_POSITIVE(1011, "Amount must be positive"),
 
+    EV_PROFILE_NOT_VERIFIED(1012, "EV_PROFILE registration not approved yet. Please wait for CVA verification."),
+
+    STATUS_NOT_PENDING(1013, "This ev-profile is not in PENDING status."),
+    STATUS_NOT_APPROVE_REJECT(1014, "New status is invalid. Must be APPROVED or REJECTED."),
+
     // validation cho du lieu dau vai
     EMAIL_INVALID(2001, "Invalid email"),
     PHONENUMBER_INVALID(2002, "Phone numer muse be 10 digits"),

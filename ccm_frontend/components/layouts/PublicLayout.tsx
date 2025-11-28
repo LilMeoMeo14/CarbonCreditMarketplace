@@ -41,8 +41,8 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => navigateTo('/')}
             >
-              <div className="w-8 h-8 bg-primary rounded-lg" />
-              <span className="font-semibold">EV Carbon Market</span>
+             <img src="/img/publiclayout/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
+              <span className="font-semibold">CarbonEV</span>
             </div>
 
             {/* Desktop Navigation */}
@@ -156,8 +156,8 @@ export function PublicLayout({ children }: PublicLayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg" />
-                <span className="font-semibold">EV Carbon Market</span>
+                 <img src="/img/publiclayout/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
+                <span className="font-semibold">CarbonEV</span>
               </div>
               <p className="text-muted-foreground">
                 {t('footer.tagline')}

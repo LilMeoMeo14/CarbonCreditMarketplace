@@ -60,6 +60,11 @@ public class CarbonCreditRequestService implements ICarbonCreditRequestService {
                 .findByEvProfileIdAndUser_UserId(creditRequestRequest.getEvProfileId(), userId)
                 .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
 
+        // kiem tra xe duoc duyet chua
+        if (evProfile.getVerificationStatus() != VerificationStatus.APPROVED) {
+            throw new AppException(ErrorCode.EV_PROFILE_NOT_VERIFIED);
+        }
+
         List<CarbonSaving> availableSavings = carbonSavingRepository
                 .findByEvProfileAndStatusAndCarbonCreditRequestIsNull(evProfile, VerificationStatus.APPROVED);
 

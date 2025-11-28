@@ -4,6 +4,7 @@ import java.util.List;
 
 import nhom12.uth.ccm.dto.request.EvProfileRequest;
 import nhom12.uth.ccm.dto.response.EvProfileResponse;
+import nhom12.uth.ccm.model.enums.VerificationStatus;
 
 public interface IEvProfileService {
 
@@ -21,5 +22,8 @@ public interface IEvProfileService {
 
     // Xoa ho so 1 xe
     void deleteEvProfile(Long evProfileId, String userId);
+
+    // duyet hoat tu choi 1 ho so xe
+    void verifyEvprofile(Long evProfileId, VerificationStatus status);
 
 }
