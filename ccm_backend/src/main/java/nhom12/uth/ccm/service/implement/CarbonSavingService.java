@@ -46,6 +46,11 @@ public class CarbonSavingService implements ICarbonSavingService {
                 EVProfile evProfile = evProfileRepository.findByEvProfileIdAndUser_UserId(evProfileId, userId)
                                 .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
 
+                // kiem tra xe duoc duyet chua
+                if (evProfile.getVerificationStatus() != VerificationStatus.APPROVED) {
+                        throw new AppException(ErrorCode.EV_PROFILE_NOT_VERIFIED);
+                }
+
                 BigDecimal co2Saved = carbonSavingRequest.getDistanceKm().multiply(EMISSION_FACTOR_KG_PER_KM);
 
                 CarbonSaving carbonSaving = new CarbonSaving(

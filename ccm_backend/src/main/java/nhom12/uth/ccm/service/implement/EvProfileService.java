@@ -93,4 +93,23 @@ public class EvProfileService implements IEvProfileService {
         evProfileRepository.delete(profile);
     }
 
+    @Override
+    public void verifyEvprofile(Long evProfileId, VerificationStatus status) {
+        EVProfile evProfile = evProfileRepository.findById(evProfileId)
+                .orElseThrow(() -> new AppException(ErrorCode.EV_PROFILE_NOT_FOUND));
+        // kiem tra trang thai
+
+        if (evProfile.getVerificationStatus() != VerificationStatus.PENDING) {
+            throw new AppException(ErrorCode.STATUS_NOT_PENDING);
+        }
+
+        if (status == VerificationStatus.PENDING) {
+            throw new AppException(ErrorCode.STATUS_NOT_APPROVE_REJECT);
+        }
+
+        evProfile.setVerificationStatus(status);
+
+        evProfileRepository.save(evProfile);
+    }
+
 }

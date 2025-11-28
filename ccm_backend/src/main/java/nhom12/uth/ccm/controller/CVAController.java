@@ -8,14 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import nhom12.uth.ccm.dto.request.ApiRespone;
+import nhom12.uth.ccm.model.enums.VerificationStatus;
 import nhom12.uth.ccm.service.ICVAService;
+import nhom12.uth.ccm.service.IEvProfileService;
 
 @RestController
 @RequestMapping("/cva")
 @RequiredArgsConstructor
 public class CVAController extends BaseController {
     private final ICVAService cvaService;
-    private final EvProfileController evProfileController; // sua lai 1 lop base controller
+    private final IEvProfileService evProfileService;
 
     // duyet yeu cau
     @PostMapping("/requests/{requestId}/approve")
@@ -23,7 +25,7 @@ public class CVAController extends BaseController {
             @PathVariable Long requestId,
             @RequestParam(required = false) String note) {
 
-        String cva = evProfileController.getAuthenticatedUserId();
+        String cva = getAuthenticatedUserId();
 
         cvaService.approveRequest(requestId, cva, note);
 
@@ -38,12 +40,30 @@ public class CVAController extends BaseController {
             @PathVariable Long requestId,
             @RequestParam String reason) {
 
-        String cva = evProfileController.getAuthenticatedUserId();
+        String cva = getAuthenticatedUserId();
 
         cvaService.rejectRequest(requestId, cva, reason);
 
         return ApiRespone.<String>builder()
                 .result("Request rejected.")
+                .build();
+    }
+
+    // duyet xe
+    @PostMapping("/ev-profile/{evProfileId}/approve")
+    public ApiRespone<String> approveEvProfile(@PathVariable Long evProfileId) {
+        evProfileService.verifyEvprofile(evProfileId, VerificationStatus.APPROVED);
+        return ApiRespone.<String>builder()
+                .result("EV Profile verified successfully (APPROVED).")
+                .build();
+    }
+
+    // tu choi xe
+    @PostMapping("/ev-profile/{evProfileId}/reject")
+    public ApiRespone<String> rejectEvProfile(@PathVariable Long evProfileId) {
+        evProfileService.verifyEvprofile(evProfileId, VerificationStatus.REJECTED);
+        return ApiRespone.<String>builder()
+                .result("EV Profile rejected.")
                 .build();
     }
 }
