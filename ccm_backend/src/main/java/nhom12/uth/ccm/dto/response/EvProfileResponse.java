@@ -36,6 +36,7 @@ public class EvProfileResponse {
     // trang thai duyet
     VerificationStatus verificationStatus;
 
-    // tai ieu xe
+    // tai lieu xe
     String verificationDocumentUrl;
+
 }

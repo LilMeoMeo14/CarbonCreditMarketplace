@@ -20,4 +20,6 @@ public interface ICarbonSavingRepository extends JpaRepository<CarbonSaving, Lon
     List<CarbonSaving> findByEvProfileAndStatusAndCarbonCreditRequestIsNull(
             EVProfile evProfile, VerificationStatus verificationStatus);
 
+    List<CarbonSaving> findByStatus(VerificationStatus status);
+
 }

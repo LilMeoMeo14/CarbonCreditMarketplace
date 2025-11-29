@@ -1,0 +1,11 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: ccm-elastic
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false # Tắt bảo mật để dev cho dễ
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"

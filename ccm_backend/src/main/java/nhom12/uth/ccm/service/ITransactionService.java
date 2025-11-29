@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import nhom12.uth.ccm.dto.response.CreditTransactionResponse;
-import nhom12.uth.ccm.model.CreditTransaction;
 
 public interface ITransactionService {
     /**

@@ -14,5 +14,8 @@ public class AuthenticationResponse {
      * Return True if email & password is correct
      */
     Boolean success;
-    String token;
+    String accessToken;
+    String refreshToken;
+    UserResponse user;
+
 }

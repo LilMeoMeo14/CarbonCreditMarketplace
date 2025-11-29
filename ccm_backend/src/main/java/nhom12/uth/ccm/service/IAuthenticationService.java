@@ -2,6 +2,8 @@ package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.request.AuthenticationRequest;
 import nhom12.uth.ccm.dto.request.CreateUserRequest;
+import nhom12.uth.ccm.dto.request.LogoutRequest;
+import nhom12.uth.ccm.dto.request.RefreshTokenRequest;
 import nhom12.uth.ccm.dto.response.AuthenticationResponse;
 
 public interface IAuthenticationService {
@@ -9,4 +11,6 @@ public interface IAuthenticationService {
 
     AuthenticationResponse register(CreateUserRequest createUserRequestDTO);
 
+    AuthenticationResponse refreshToken(RefreshTokenRequest request);
+    void logout(LogoutRequest request);
 }

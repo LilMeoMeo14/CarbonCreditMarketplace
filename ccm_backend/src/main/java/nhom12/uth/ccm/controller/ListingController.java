@@ -7,16 +7,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nhom12.uth.ccm.document.ListingDocument;
 import nhom12.uth.ccm.dto.request.ApiRespone;
 import nhom12.uth.ccm.dto.request.BidRequest;
 import nhom12.uth.ccm.dto.request.ListingRequest;
 import nhom12.uth.ccm.dto.response.BidResponse;
 import nhom12.uth.ccm.dto.response.ListingResponse;
-import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.IListingService;
 
 @RestController
@@ -24,7 +25,6 @@ import nhom12.uth.ccm.service.IListingService;
 @RequestMapping("/listings")
 public class ListingController extends BaseController {
     private final IListingService listingService;
-    private final IUserRepository userRepository;
 
     // khoa so du trong vi tao listing
     @PostMapping
@@ -91,6 +91,20 @@ public class ListingController extends BaseController {
 
         return ApiRespone.<BidResponse>builder()
                 .result(bidResponse)
+                .build();
+    }
+
+    // tim kiem va loc tin chi theo nguoi ban , loai xe , gia , so luong,..
+
+    @GetMapping("/search")
+    public ApiRespone<List<ListingDocument>> searchListing(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Double minAmount) {
+        List<ListingDocument> results = listingService.searchListingsES(keyword, minPrice, maxPrice, minAmount);
+
+        return ApiRespone.<List<ListingDocument>>builder()
+                .result(results)
                 .build();
     }
 

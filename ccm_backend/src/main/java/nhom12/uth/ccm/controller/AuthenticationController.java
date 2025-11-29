@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import nhom12.uth.ccm.dto.request.AuthenticationRequest;
 import nhom12.uth.ccm.dto.request.CreateUserRequest;
+import nhom12.uth.ccm.dto.request.LogoutRequest;
+import nhom12.uth.ccm.dto.request.RefreshTokenRequest;
 import nhom12.uth.ccm.dto.response.AuthenticationResponse;
 import nhom12.uth.ccm.exception.ApiRespone;
 import nhom12.uth.ccm.exception.AppException;
@@ -88,6 +90,34 @@ public class AuthenticationController {
         } else {
             throw new AppException(ErrorCode.INVALID_USERREQUEST);
         }
+    }
+
+    /**
+     * API Làm mới Token (Khi Access Token hết hạn).
+     * URL: POST /auth/refresh
+     */
+    @PostMapping("/refresh")
+    public ApiRespone<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+
+        AuthenticationResponse result = authenticationService.refreshToken(request);
+
+        return ApiRespone.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    /**
+     * API Đăng xuất.
+     * URL: POST /auth/logout
+     */
+    @PostMapping("/logout")
+    public ApiRespone<String> logout(@RequestBody LogoutRequest request) {
+
+        authenticationService.logout(request);
+
+        return ApiRespone.<String>builder()
+                .result("Logout successful")
+                .build();
     }
 
 }

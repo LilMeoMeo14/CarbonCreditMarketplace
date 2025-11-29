@@ -3,6 +3,7 @@ package nhom12.uth.ccm.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import nhom12.uth.ccm.document.ListingDocument;
 import nhom12.uth.ccm.dto.request.ListingRequest;
 import nhom12.uth.ccm.dto.response.BidResponse;
 import nhom12.uth.ccm.dto.response.ListingResponse;
@@ -40,5 +41,8 @@ public interface IListingService {
     BidResponse placeBid(Long listingId, BigDecimal amount, String bidderId);
 
     void processExpiredAuctions();
+
+    // seaching
+    public List<ListingDocument> searchListingsES(String keyword, Double minPrice, Double maxPrice, Double minAmount);
 
 }

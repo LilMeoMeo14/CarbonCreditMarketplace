@@ -2,7 +2,6 @@ package nhom12.uth.ccm.service.implement;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +17,6 @@ public class UserInfoService implements UserDetailsService {
 
     private final IUserRepository userRepository;
 
-    @Autowired
     public UserInfoService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }

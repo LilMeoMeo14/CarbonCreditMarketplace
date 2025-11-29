@@ -1,7 +1,5 @@
 package nhom12.uth.ccm.exception;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
 
 @Getter
@@ -15,7 +13,7 @@ public enum ErrorCode {
     EMAIL_EXISTED(1001, "EMAIL EXISTED"),
     PHONENUMBER_EXISTED(1002, "Phone NUMBER EXISTED"),
     NO_AVAILABLE_SAVINGS(1003, "No Carbong savings are eligible to submit a claim"),
-    INSUFFICIENT_BALANCE(1004, "Insufficient available balance to list for sale."),
+    INSUFFICIENT_BALANCE(1004, "Insufficient available balance"),
 
     FILE_NULL(1007, "File cannot be null"),
     FILE_SIZE_TOO_LARGE(1008, "File size exceeds limit"),
@@ -25,8 +23,9 @@ public enum ErrorCode {
 
     EV_PROFILE_NOT_VERIFIED(1012, "EV_PROFILE registration not approved yet. Please wait for CVA verification."),
 
-    STATUS_NOT_PENDING(1013, "This ev-profile is not in PENDING status."),
+    STATUS_NOT_PENDING(1013, "This is not in PENDING status."),
     STATUS_NOT_APPROVE_REJECT(1014, "New status is invalid. Must be APPROVED or REJECTED."),
+    STATUS_NOT_WITHDRAW(1015, "Type is not withdraw"),
 
     // validation cho du lieu dau vai
     EMAIL_INVALID(2001, "Invalid email"),

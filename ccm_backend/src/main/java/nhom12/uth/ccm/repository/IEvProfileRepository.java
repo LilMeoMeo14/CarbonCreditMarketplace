@@ -1,6 +1,7 @@
 package nhom12.uth.ccm.repository;
 
 import nhom12.uth.ccm.model.EVProfile;
+import nhom12.uth.ccm.model.enums.VerificationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,7 @@ public interface IEvProfileRepository extends JpaRepository<EVProfile, Long> {
 
     // Tim 1 xe cu the 1 cua user nao do
     Optional<EVProfile> findByEvProfileIdAndUser_UserId(Long evProfileId, String userId);
+
+    // tìm tất cả xe theo trạng thái
+    List<EVProfile> findByVerificationStatus(VerificationStatus status);
 }

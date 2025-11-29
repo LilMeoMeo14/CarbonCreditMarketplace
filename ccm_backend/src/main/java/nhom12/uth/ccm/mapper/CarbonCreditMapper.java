@@ -8,9 +8,9 @@ import nhom12.uth.ccm.model.CarbonCredit;
 
 @Mapper(componentModel = "spring")
 public interface CarbonCreditMapper {
-  @Mapping(source = "request.requestId", target = "requestId")
-  @Mapping(source = "user.userId", target = "ownerId")
-  @Mapping(source = "user.email", target = "ownerEmail")
+    @Mapping(source = "request.requestId", target = "requestId")
+    @Mapping(source = "user.userId", target = "ownerId")
+    @Mapping(source = "user.email", target = "ownerEmail")
     CarbonCreditResponse toResponse(CarbonCredit credit);
 
 }

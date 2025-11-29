@@ -1,8 +1,16 @@
 package nhom12.uth.ccm.service.implement;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import nhom12.uth.ccm.dto.response.CarbonSavingResponse;
+import nhom12.uth.ccm.dto.response.EvProfileResponse;
+import nhom12.uth.ccm.mapper.CarbonSavingMapper;
+import nhom12.uth.ccm.mapper.EvProfileMapper;
+import nhom12.uth.ccm.model.enums.VerificationStatus;
+import nhom12.uth.ccm.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,17 +23,13 @@ import nhom12.uth.ccm.mapper.CarbonCreditMapper;
 import nhom12.uth.ccm.mapper.CarbonCreditRequestMapper;
 import nhom12.uth.ccm.model.CarbonCredit;
 import nhom12.uth.ccm.model.CarbonCreditRequest;
+import nhom12.uth.ccm.model.CarbonSaving;
 import nhom12.uth.ccm.model.CarbonWallet;
 import nhom12.uth.ccm.model.Certificate;
 import nhom12.uth.ccm.model.User;
 import nhom12.uth.ccm.model.enums.CertificateType;
 import nhom12.uth.ccm.model.enums.CreditStatus;
 import nhom12.uth.ccm.model.enums.RequestStatus;
-import nhom12.uth.ccm.repository.ICarbonCreditRepository;
-import nhom12.uth.ccm.repository.ICarbonCreditRequestRepository;
-import nhom12.uth.ccm.repository.ICarbonWalletRepository;
-import nhom12.uth.ccm.repository.ICertificateRepository;
-import nhom12.uth.ccm.repository.IUserRepository;
 import nhom12.uth.ccm.service.ICVAService;
 
 @Service
@@ -37,9 +41,12 @@ public class CVAService implements ICVAService {
         private final ICarbonWalletRepository carbonWalletRepository;
         private final IUserRepository userRepository;
         private final ICertificateRepository certificateRepository;
-
+        private final IEvProfileRepository evProfileRepository;
+        private final EvProfileMapper evProfileMapper;
+        private final CarbonSavingMapper carbonSavingMapper;
         private final CarbonCreditMapper carbonCreditMapper;
         private final CarbonCreditRequestMapper carbonCreditRequestMapper;
+        private final ICarbonSavingRepository carbonSavingRepository;
 
         @Override
         @Transactional
@@ -134,6 +141,72 @@ public class CVAService implements ICVAService {
                 CarbonCreditRequest savedRequest = carbonCreditRequestRepository.save(carbonCreditRequest);
 
                 return carbonCreditRequestMapper.toResponse(savedRequest);
+        }
+
+        @Override
+        public List<EvProfileResponse> getPendingEvProfiles() {
+                return evProfileRepository.findByVerificationStatus(VerificationStatus.PENDING)
+                                .stream()
+                                .map(evProfileMapper::toEvProfileResponse)
+                                .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<CreditRequestResponse> getPendingRequests() {
+                return carbonCreditRequestRepository.findByStatus(RequestStatus.PENDING)
+                                .stream()
+                                .map(carbonCreditRequestMapper::toResponse)
+                                .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<CarbonSavingResponse> getRequestSavings(Long requestId) {
+                // 1. Tìm Request
+                CarbonCreditRequest request = carbonCreditRequestRepository.findById(requestId)
+                                .orElseThrow(() -> new AppException(ErrorCode.REQUEST_NOT_FOUND));
+
+                // 2. Lấy danh sách Saving từ Request và map sang DTO
+                // (Lưu ý: Trong Model CarbonCreditRequest phải có List<CarbonSaving>
+                // carbonSavings)
+                return request.getCarbonSavings().stream()
+                                .map(carbonSavingMapper::toResponse) // Đảm bảo tên hàm trong Mapper là toResponseDTO
+                                .collect(Collectors.toList());
+        }
+
+        @Override
+        @Transactional
+        public void verifySaving(Long savingId, String verifierId, VerificationStatus status, String note) {
+                // 1. Kiểm tra quyền CVA
+                userRepository.findById(verifierId)
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+                // 2. Tìm bản ghi Saving
+                CarbonSaving saving = carbonSavingRepository.findById(savingId)
+                                .orElseThrow(() -> new RuntimeException("Saving not found"));
+
+                // 3. Chỉ được duyệt những cái đang PENDING
+                if (saving.getStatus() != VerificationStatus.PENDING) {
+                        throw new RuntimeException("Saving is not in PENDING status");
+                }
+
+                // 4. Kiểm tra trạng thái đích (Chỉ cho phép APPROVED hoặc REJECTED)
+                if (status == VerificationStatus.PENDING) {
+                        throw new RuntimeException("Cannot set status back to PENDING");
+                }
+
+                // 5. Cập nhật
+                saving.setStatus(status);
+                // (Optional: Lưu note vào saving nếu model có hỗ trợ)
+
+                carbonSavingRepository.save(saving);
+        }
+
+        @Override
+        public List<CarbonSavingResponse> getPendingSavings() {
+                return carbonSavingRepository.findByStatus(VerificationStatus.PENDING)
+                                .stream()
+                                .map(carbonSavingMapper::toResponse)
+                                .collect(Collectors.toList());
         }
 
 }

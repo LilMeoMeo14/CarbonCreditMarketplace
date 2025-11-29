@@ -55,12 +55,12 @@ public class CarbonSavingService implements ICarbonSavingService {
 
                 // load anh de kiem tra file anh co duoc luu chua
 
-                try {
-                        storageService.loadAsResource(carbonSavingRequest.getEvidenceImageUrl());
-                } catch (Exception e) {
-                        // Bạn có thể tạo ErrorCode.EVIDENCE_FILE_NOT_FOUND cho rõ nghĩa
-                        throw new AppException(ErrorCode.FILE_NOT_FOUND);
-                }
+                // try {
+                // storageService.loadAsResource(carbonSavingRequest.getEvidenceImageUrl());
+                // } catch (Exception e) {
+                // // Bạn có thể tạo ErrorCode.EVIDENCE_FILE_NOT_FOUND cho rõ nghĩa
+                // throw new AppException(ErrorCode.FILE_NOT_FOUND);
+                // }
 
                 BigDecimal co2Saved = carbonSavingRequest.getDistanceKm().multiply(EMISSION_FACTOR_KG_PER_KM);
 

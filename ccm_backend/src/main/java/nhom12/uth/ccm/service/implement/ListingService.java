@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import nhom12.uth.ccm.document.ListingDocument;
 import nhom12.uth.ccm.dto.request.ListingRequest;
 import nhom12.uth.ccm.dto.response.BidResponse;
 import nhom12.uth.ccm.dto.response.ListingResponse;
@@ -20,6 +25,7 @@ import nhom12.uth.ccm.mapper.ListingMapper;
 import nhom12.uth.ccm.model.Bid;
 import nhom12.uth.ccm.model.CarbonWallet;
 import nhom12.uth.ccm.model.CreditTransaction;
+import nhom12.uth.ccm.model.EVProfile;
 import nhom12.uth.ccm.model.EWallet;
 import nhom12.uth.ccm.model.Listing;
 import nhom12.uth.ccm.model.PaymentTransaction;
@@ -34,6 +40,7 @@ import nhom12.uth.ccm.repository.IBidRepository;
 import nhom12.uth.ccm.repository.ICarbonWalletRepository;
 import nhom12.uth.ccm.repository.IEWalletRepository;
 import nhom12.uth.ccm.repository.IListingRepository;
+import nhom12.uth.ccm.repository.IListingSearchRepository;
 import nhom12.uth.ccm.repository.IPaymentTransactionRepository;
 import nhom12.uth.ccm.repository.ITransactionRepository;
 import nhom12.uth.ccm.repository.IUserRepository;
@@ -52,6 +59,10 @@ public class ListingService implements IListingService {
     private final IPaymentTransactionRepository paymentTransactionRepository;
     private final ListingMapper listingMapper;
     private final BidMapper bidMapper;
+    private final IListingSearchRepository listingSearchRepository;
+
+    // build query phuc tap
+    private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
     @Transactional
@@ -80,15 +91,16 @@ public class ListingService implements IListingService {
         Listing newListing = listingMapper.toListing(listingRequest);
         newListing.setSeller(seller);
         newListing.setStatus(ListingStatus.ACTIVE); // dang ban
+        syncToElasticsearch(listingRepository.save(newListing));
 
-        return listingMapper.tResponse(listingRepository.save(newListing));
+        return listingMapper.toResponse(listingRepository.save(newListing));
     }
 
     @Override
     public List<ListingResponse> getActiveListings() {
         return listingRepository.findByStatusOrderByCreatedAtDesc(ListingStatus.ACTIVE)
                 .stream()
-                .map(listingMapper::tResponse)
+                .map(listingMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +108,7 @@ public class ListingService implements IListingService {
     public List<ListingResponse> getMyListings(String userId) {
         return listingRepository.findBySeller_UserIdOrderByCreatedAtDesc(userId)
                 .stream()
-                .map(listingMapper::tResponse)
+                .map(listingMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -327,5 +339,68 @@ public class ListingService implements IListingService {
                 .description(desc)
                 .build();
         paymentTransactionRepository.save(pt);
+    }
+
+    private void syncToElasticsearch(Listing listing) {
+        try {
+            // Lấy thông tin xe để index
+            String vehicleInfo = "Unknown";
+            if (!listing.getSeller().getEvProfiles().isEmpty()) {
+                EVProfile car = listing.getSeller().getEvProfiles().get(0);
+                vehicleInfo = car.getVehicleModel();
+            }
+            String sellerName = listing.getSeller().getFirstName() + " " + listing.getSeller().getLastName();
+
+            ListingDocument doc = ListingDocument.builder()
+                    .id(listing.getListingId())
+                    .amount(listing.getAmount().doubleValue())
+                    .price(listing.getPrice().doubleValue())
+                    .type(listing.getListingType().name())
+                    .status(listing.getStatus().name())
+                    .vehicleModel(vehicleInfo)
+                    .sellerName(sellerName)
+                    .createdAt(listing.getCreatedAt())
+                    .build();
+
+            listingSearchRepository.save(doc);
+            System.out.println("Synced Listing #" + listing.getListingId() + " to Elasticsearch");
+        } catch (Exception e) {
+            e.printStackTrace(); // quang loi ra log
+        }
+    }
+
+    @Override
+    public List<ListingDocument> searchListingsES(String keyword, Double minPrice, Double maxPrice, Double minAmount) {
+        // xay dung bo loc
+        Criteria criteria = new Criteria("status").is("ACTIVE"); // luon tim nhung listing dang active
+
+        // neu co tu khoa thi tim trong ten xe , hoac nguoi ban
+
+        if (keyword != null && !keyword.isEmpty()) {
+            criteria = criteria.and(new Criteria("vehicleModel").contains(keyword)
+                    .or(new Criteria("sellerName").contains(keyword)));
+        }
+
+        // loc theo gia
+        if (minPrice != null && maxPrice != null) {
+            criteria = criteria.and("price").between(minPrice, maxPrice);
+        } else if (minPrice != null) {
+            criteria = criteria.and("price").greaterThanEqual(minPrice);
+        } else if (maxPrice != null) {
+            criteria = criteria.and("price").lessThanEqual(maxPrice);
+        }
+
+        // loc theo so luong
+        if (minAmount != null) {
+            criteria = criteria.and("amount").greaterThanEqual(minAmount);
+        }
+
+        // thuc thi query
+        CriteriaQuery query = new CriteriaQuery(criteria);
+        SearchHits<ListingDocument> searchHits = elasticsearchOperations.search(query, ListingDocument.class);
+
+        return searchHits.stream()
+                .map(hit -> hit.getContent())
+                .collect(Collectors.toList());
     }
 }

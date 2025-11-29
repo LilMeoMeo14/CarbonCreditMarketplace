@@ -1,7 +1,6 @@
 package nhom12.uth.ccm.service;
 
 import java.util.Date;
-
 import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,47 +9,46 @@ import io.jsonwebtoken.Claims;
 
 public interface IJwtService {
 
-    /**
-     * Tạo ra một JWT token mới dựa trên email (username).
-     *
-     * @param email Email của người dùng
-     * @return Chuỗi JWT
-     */
     String generateToken(String email);
 
     /**
-     * Trích xuất username (email) từ 'sub' claim của token.
-     *
-     * @param token Chuỗi JWT
-     * @return Email (username)
+     * Trích xuất username (email) từ token.
      */
     String extractUsername(String token);
 
     /**
-     * Trích xuất thời gian hết hạn từ token.
-     *
-     * @param token Chuỗi JWT
-     * @return Ngày hết hạn
+     * Trích xuất thời gian hết hạn.
      */
     Date extractExpiration(String token);
 
     /**
-     * Trích xuất một claim (trường) cụ thể từ payload của token.
-     *
-     * @param token          Chuỗi JWT
-     * @param claimsResolver Một function để chỉ định claim nào cần lấy
-     * @param <T>            Kiểu dữ liệu của claim (ví dụ: String, Date)
-     * @return Giá trị của claim
+     * Trích xuất một claim cụ thể.
      */
     <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
 
     /**
-     * Kiểm tra xem token có hợp lệ không (so với UserDetails).
-     *
-     * @param token       Chuỗi JWT
-     * @param userDetails Đối tượng UserDetails (lấy từ DB)
-     * @return True nếu token hợp lệ, False nếu không
+     * Kiểm tra token có hợp lệ không.
      */
     Boolean validateToken(String token, UserDetails userDetails);
 
+    /**
+     * Kiểm tra token đã hết hạn chưa (Helper method).
+     */
+    boolean isTokenExpired(String token);
+
+    // ==================================================
+    // === CÁC HÀM TẠO TOKEN (MỚI) ===
+    // ==================================================
+
+    /**
+     * Tạo Access Token (Thời hạn ngắn: VD 15 phút).
+     * Chứa thông tin quan trọng: Roles, UserID... để phân quyền.
+     */
+    String generateAccessToken(UserDetails userDetails);
+
+    /**
+     * Tạo Refresh Token (Thời hạn dài: VD 7 ngày).
+     * Dùng để xin cấp lại Access Token mới khi cái cũ hết hạn.
+     */
+    String generateRefreshToken(UserDetails userDetails);
 }

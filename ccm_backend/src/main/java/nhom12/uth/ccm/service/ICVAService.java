@@ -1,8 +1,12 @@
 package nhom12.uth.ccm.service;
 
 import nhom12.uth.ccm.dto.response.CarbonCreditResponse;
+import nhom12.uth.ccm.dto.response.CarbonSavingResponse;
 import nhom12.uth.ccm.dto.response.CreditRequestResponse;
-import nhom12.uth.ccm.model.CarbonCreditRequest;
+import nhom12.uth.ccm.dto.response.EvProfileResponse;
+import nhom12.uth.ccm.model.enums.VerificationStatus;
+
+import java.util.List;
 
 public interface ICVAService {
 
@@ -24,4 +28,16 @@ public interface ICVAService {
      * Hành động này chỉ chuyển trạng thái Request -> REJECTED
      */
     CreditRequestResponse rejectRequest(Long requestId, String verifierId, String reason);
+
+    List<EvProfileResponse> getPendingEvProfiles();
+
+    List<CreditRequestResponse> getPendingRequests();
+
+    List<CarbonSavingResponse> getRequestSavings(Long requestId);
+
+    // duyet hoac tu choi carbon saving
+    void verifySaving(Long savingId, String verifierId, VerificationStatus status, String note);
+
+    List<CarbonSavingResponse> getPendingSavings();
+
 }

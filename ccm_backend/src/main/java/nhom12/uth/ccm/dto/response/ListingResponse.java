@@ -23,6 +23,8 @@ public class ListingResponse {
     // seller information
     String sellerId;
     String sellerName; // firstname + lastname
+    String vehicleModel; // ten xe
+    String licensePlate; // bien so
     BigDecimal amount;
     BigDecimal price;
     ListingType listingType;

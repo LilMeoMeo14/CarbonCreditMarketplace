@@ -10,15 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RetireRequest {
-
-    // so luong tin chi muon quy doi
-    BigDecimal amount;
-
-    String reason; // ly do chuyen doi
-
+public class WithDrawReqest {
+    BigDecimal amount; // Số tiền muốn rút
+    String bankInfo; // thông tin ngân hàng , chưa đủ trình nên làm sạo sạo duyệt tay
 }

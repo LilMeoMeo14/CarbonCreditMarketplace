@@ -5,9 +5,7 @@ import lombok.*;
 import nhom12.uth.ccm.model.enums.PaymentStatus;
 import nhom12.uth.ccm.model.enums.PaymentType;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
